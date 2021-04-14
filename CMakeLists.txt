@@ -3,4 +3,4 @@ project(LintCode)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(LintCode main.cpp)
+add_executable(LintCode main.cpp code.cc)
