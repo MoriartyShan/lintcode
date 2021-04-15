@@ -194,6 +194,7 @@ vector<vector<string>> Solution::solveNQueens(int n) {
   return res;
 }
 
+//the max sum value that pass root
 int _maxPathSum(const TreeNode* root, int *cur_max){
   if (root == nullptr) {
     return 0;
@@ -201,6 +202,13 @@ int _maxPathSum(const TreeNode* root, int *cur_max){
   int res;
   int l = _maxPathSum(root->left, cur_max);
   int r = _maxPathSum(root->right, cur_max);
+  if (l < 0) {
+    l = 0;
+  }
+  if (r < 0) {
+    r = 0;
+  }
+
   LOG << "v= " << root->val << "," << l << "," << r << std::endl;
   if (l < r) {
     res = root->val + r;
@@ -208,8 +216,8 @@ int _maxPathSum(const TreeNode* root, int *cur_max){
     res = root->val + l;
   }
 
-  int max = std::max(root->val + l + r, std::max(root->val + l, std::max(root->val + r, root->val)));
-  *cur_max = std::max(max, *cur_max);
+//  int max = std::max(root->val + l + r, std::max(root->val + l, std::max(root->val + r, root->val)));
+  *cur_max = std::max(root->val + l + r, *cur_max);
 
   return res;
 }
