@@ -228,3 +228,65 @@ int Solution::maxPathSum(TreeNode * root) {
   _maxPathSum(root, &cur_max);
   return cur_max;
 }
+
+
+void _backPack2(int m, int n, const int *A, const int size, int *cur_max, std::vector<bool> &flag) {
+  if (m == *cur_max || size == 0 || m == 0 || n > m) {
+    return;
+  }
+
+  for (int i = 0; i < size; i++) {
+    int sum = (A[i] + n);
+    if (sum <= m && (!flag[sum])) {
+      *cur_max = std::max(sum, *cur_max);
+      flag[sum] = true;
+
+      _backPack2(m, sum, A + i + 1, size - i - 1, cur_max, flag);
+    }
+  }
+  return ;
+}
+
+
+///believe that this one can run currect, but it cost too much time.
+int _backPack(int m, const int *A, const int size, int *cur) {
+  int c = 0;
+  if (m == 0 || size == 0) {
+    return c;
+  }
+  if (*cur == 0) {
+    return c;
+  }
+  for (int i = 0; i < size; i++) {
+    if (A[i] <= m) {
+      int left = m - A[i];
+      *cur = std::min(*cur, left);
+      c++;
+      c += _backPack(left, A + i + 1, size - i - 1, cur);
+    }
+  }
+  return c;
+}
+
+
+/**
+     * @param m: An integer m denotes the size of a backpack
+     * @param A: Given n items with size A[i]
+     * @return: The maximum size
+     */
+int Solution::backPack(int m, vector<int> &A) {
+  // write your code here
+#if 0
+  int res = std::numeric_limits<int>::max();
+  _backPack(m, A.data(), A.size(), &res);
+  if (m > res)
+    return m - res;
+  return 0;
+#else
+  int res = std::numeric_limits<int>::max();
+  std::vector<bool> flag(m, false);
+
+  _backPack2(m, (int)0, A.data(), (int)A.size(), &res, flag);
+  return res;
+#endif
+}
