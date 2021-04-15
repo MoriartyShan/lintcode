@@ -230,8 +230,8 @@ int Solution::maxPathSum(TreeNode * root) {
 }
 
 
-void _backPack2(int m, int n, const int *A, const int size, int *cur_max, std::vector<bool> &flag) {
-  if (m == *cur_max || size == 0 || m == 0 || n > m) {
+void _backPack2(const int m, const int n, const int *A, const int size, int *cur_max, std::vector<bool> &flag) {
+  if (m == *cur_max || size == 0 || m == 0 || n >= m) {
     return;
   }
 
@@ -239,6 +239,7 @@ void _backPack2(int m, int n, const int *A, const int size, int *cur_max, std::v
     int sum = (A[i] + n);
     if (sum <= m && (!flag[sum])) {
       *cur_max = std::max(sum, *cur_max);
+      LOG << "sum = " << *cur_max << std::endl;
       flag[sum] = true;
 
       _backPack2(m, sum, A + i + 1, size - i - 1, cur_max, flag);
@@ -283,7 +284,7 @@ int Solution::backPack(int m, vector<int> &A) {
     return m - res;
   return 0;
 #else
-  int res = std::numeric_limits<int>::max();
+  int res = std::numeric_limits<int>::lowest();
   std::vector<bool> flag(m, false);
 
   _backPack2(m, (int)0, A.data(), (int)A.size(), &res, flag);
