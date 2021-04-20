@@ -292,31 +292,31 @@ int Solution::backPack(int m, vector<int> &A) {
 #endif
 }
 
-bool isValidBST(TreeNode * root, int64_t max, int64_t min) {
+bool isValidBST(TreeNode * root, const int max, const int min, const bool has_max, const bool has_min) {
   bool res = true;
   if (root == nullptr) {
     return res;
   }
 
   if (root->left != nullptr) {
-    if (root->val > root->left->val && root->left->val > min && root->left->val < max) {
-      res = isValidBST(root->left, root->val, min);
-      LOG << "v = " << root->val << "," << res << std::endl;
+    if (root->val > root->left->val
+        && (!has_min || root->left->val > min)
+        && (!has_max || root->left->val < max)) {
+      res = isValidBST(root->left, root->val, min, true, has_min);
     } else {
       res = false;
-//      LOG << "v = " << root->val << "," << root->left->val << "," << root->right->val << "," << min << "," << max << "," << res << std::endl;
     }
   }
-//  LOG << "v = " << root->val << "," << res << std::endl;
 
   if (res && root->right != nullptr) {
-    if (root->val < root->right->val && root->right->val > min && root->right->val < max) {
-      res = isValidBST(root->right, max, root->val);
+    if (root->val < root->right->val
+        && (!has_min || root->right->val > min)
+        && (!has_max || root->right->val < max)) {
+      res = isValidBST(root->right, max, root->val, has_max, true);
     } else {
       res = false;
     }
   }
-//  LOG << "v = " << root->val << "," << res << std::endl;
 
   return res;
 }
@@ -327,5 +327,5 @@ bool isValidBST(TreeNode * root, int64_t max, int64_t min) {
      */
 bool Solution::isValidBST(TreeNode * root) {
   // write your code here
-  return ::isValidBST(root, std::numeric_limits<int64_t>::max(), std::numeric_limits<int64_t>::lowest());
+  return ::isValidBST(root, std::numeric_limits<int>::max(), std::numeric_limits<int>::lowest(), false, false);
 }
