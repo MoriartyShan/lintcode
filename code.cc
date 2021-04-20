@@ -291,3 +291,41 @@ int Solution::backPack(int m, vector<int> &A) {
   return res;
 #endif
 }
+
+bool isValidBST(TreeNode * root, int64_t max, int64_t min) {
+  bool res = true;
+  if (root == nullptr) {
+    return res;
+  }
+
+  if (root->left != nullptr) {
+    if (root->val > root->left->val && root->left->val > min && root->left->val < max) {
+      res = isValidBST(root->left, root->val, min);
+      LOG << "v = " << root->val << "," << res << std::endl;
+    } else {
+      res = false;
+//      LOG << "v = " << root->val << "," << root->left->val << "," << root->right->val << "," << min << "," << max << "," << res << std::endl;
+    }
+  }
+//  LOG << "v = " << root->val << "," << res << std::endl;
+
+  if (res && root->right != nullptr) {
+    if (root->val < root->right->val && root->right->val > min && root->right->val < max) {
+      res = isValidBST(root->right, max, root->val);
+    } else {
+      res = false;
+    }
+  }
+//  LOG << "v = " << root->val << "," << res << std::endl;
+
+  return res;
+}
+
+/**
+     * @param root: The root of binary tree.
+     * @return: True if the binary tree is BST, or false
+     */
+bool Solution::isValidBST(TreeNode * root) {
+  // write your code here
+  return ::isValidBST(root, std::numeric_limits<int64_t>::max(), std::numeric_limits<int64_t>::lowest());
+}

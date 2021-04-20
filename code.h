@@ -76,5 +76,12 @@ public:
      * @return: The maximum size
      */
   int backPack(int m, vector<int> &A);
+
+  /**
+     * @param root: The root of binary tree.
+     * @return: True if the binary tree is BST, or false
+     */
+  bool isValidBST(TreeNode * root);
+
 };
 #endif //LINTCODE_CODE_H
