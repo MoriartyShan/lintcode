@@ -4,15 +4,25 @@
 
 int main() {
   Solution test;
-  TreeNode a(3), b(1), c(0), d(2), e(5), f(4), g(6);
-  a.left = &b;
-  a.right = &e;
-  b.left = &c;
-  b.right = &d;
-  e.left = &f;
-  e.right = &g;
+  ListNode a(3), b(3), c(1), d(2), e(4);
+  a.next = &b;
+  b.next = &c;
+  c.next = &d;
+  d.next = &e;
+  e.next = nullptr;
+//  3->3->1->2->4->null
+  ListNode *p = &a;
+  while (p != nullptr) {
+    std::cout << p->val << "->";
+    p = p->next;
+  }
+  std::cout << std::endl;
+  p = test.partition(&a, 3);
 
-  LOG << test.isValidBST( &a) << std::endl;
+  while (p != nullptr) {
+    std::cout << p->val << "->";
+    p = p->next;
+  }
 
     return 0;
 }

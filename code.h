@@ -15,6 +15,30 @@
 
 using namespace std;
 
+/**
+* Definition of singly-linked-list:
+ * */
+class ListNode {
+public:
+  int val;
+  ListNode *next;
+  ListNode(int val) {
+    this->val = val;
+    this->next = NULL;
+  }
+  void show(const int n) const {
+    const ListNode *p = this;
+    int c = 0;
+    while (p != nullptr) {
+      std::cout << p->val << "->";
+      p = p->next;
+      if (c++ == n) {
+        break;
+      }
+    }
+    std::cout << std::endl;
+  }
+};
 
 class TreeNode {
 public:
@@ -82,6 +106,15 @@ public:
      * @return: True if the binary tree is BST, or false
      */
   bool isValidBST(TreeNode * root);
+
+
+  /**
+   * @param head: The first node of linked list
+   * @param x: An integer
+   * @return: A ListNode
+   */
+  ListNode * partition(ListNode * head, int x);
+
 
 };
 #endif //LINTCODE_CODE_H

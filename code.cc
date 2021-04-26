@@ -329,3 +329,51 @@ bool Solution::isValidBST(TreeNode * root) {
   // write your code here
   return ::isValidBST(root, std::numeric_limits<int>::max(), std::numeric_limits<int>::lowest(), false, false);
 }
+
+
+ListNode * partition(ListNode* head, const int x, ListNode** left, ListNode** right) {
+  if (head == nullptr) {
+    if ((*left) != nullptr) {
+      (*left) = nullptr;
+    }
+
+    if ((*right) != nullptr) {
+      (*right) = nullptr;
+    }
+    return head;
+  } else if (head->val >= x) {
+
+    *right = head;
+    return partition(head->next, x, left, &head->next);
+  }
+
+  *left = head;
+  return partition(head->next, x, &head->next, right);
+}
+
+/**
+ * @param head: The first node of linked list
+ * @param x: An integer
+ * @return: A ListNode
+ */
+ListNode * Solution::partition(ListNode * head, int x) {
+  // write your code here
+  ListNode *left = nullptr, *right = nullptr;
+  ::partition(head, x, &left, &right);
+  right->show(5);
+  left->show(5);
+  {
+    ListNode *left_tail = left;
+    while (left_tail != nullptr && left_tail->next != nullptr) {
+      left_tail = left_tail->next;
+    }
+    if (left_tail != nullptr) {
+      left_tail->next = right;
+    } else {
+      left = right;
+    }
+  }
+
+  return left;
+
+}
