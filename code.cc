@@ -377,3 +377,90 @@ ListNode * Solution::partition(ListNode * head, int x) {
   return left;
 
 }
+
+/**
+* @param root: The root of binary tree.
+* @return: An integer
+*/
+int Solution::maxDepth(TreeNode * root) {
+    // write your code here
+#if 0
+    if (root == nullptr) {
+        return 0;
+    }
+    int left = 1 + maxDepth(root->left);
+    int right = 1 + maxDepth(root->right);
+    return (left > right) ? left : right;
+#else
+    int depth = 0;
+    while(root != nullptr) {
+        depth++;
+
+    }
+
+
+#endif
+}
+
+int find_min(ListNode * head) {
+    int max = head->val;
+    int min = head->val;
+}
+
+
+ListNode * partition(ListNode* head, const int x, ListNode** left, ListNode** equal, ListNode** right) {
+    if (head == nullptr) {
+        if ((*left) != nullptr) {
+            (*left) = nullptr;
+        }
+        if ((*equal) != nullptr) {
+            (*equal) = nullptr;
+        }
+        if ((*right) != nullptr) {
+            (*right) = nullptr;
+        }
+        return head;
+    } else if (head->val > x) {
+
+        *right = head;
+        return partition(head->next, x, left, equal, &head->next);
+    } else if (head->val == x) {
+        *equal = head;
+        return partition(head->next, x, left, &head->next, right);
+    }
+
+    *left = head;
+    return partition(head->next, x, &head->next, equal, right);
+}
+
+/**
+ * @param head: The head of linked list.
+ * @return: You should return the head of the sorted linked list, using constant space complexity.
+ */
+ListNode * Solution::sortList(ListNode * head) {
+    // write your code here
+    auto cat = [](ListNode *left, ListNode *right) {
+        ListNode *left_tail = left;
+        while (left_tail != nullptr && left_tail->next != nullptr) {
+            left_tail = left_tail->next;
+        }
+        if (left_tail != nullptr) {
+            left_tail->next = right;
+        } else {
+            left = right;
+        }
+        return left;
+    };
+
+    if (head != nullptr) {
+        ListNode *left = nullptr, *right = nullptr, *equal = nullptr;
+        ::partition(head, head->val, &left, &equal, &right);
+        left = sortList(left);
+        right = sortList(right);
+
+        equal = cat(equal, right);
+        left = cat(left, equal);
+        return left;
+    }
+    return nullptr;
+}

@@ -115,6 +115,16 @@ public:
    */
   ListNode * partition(ListNode * head, int x);
 
+    /**
+   * @param root: The root of binary tree.
+   * @return: An integer
+   */
+    int maxDepth(TreeNode * root);
 
+    /**
+     * @param head: The head of linked list.
+     * @return: You should return the head of the sorted linked list, using constant space complexity.
+     */
+    ListNode * sortList(ListNode * head);
 };
 #endif //LINTCODE_CODE_H
