@@ -4,20 +4,17 @@
 
 int main() {
   Solution test;
-  ListNode a(0), b(5), c(4), d(3), e(2), f(1), g(6);
+  ListNode a(3), b(2), c(1), d(0), e(4);
   a.next = &b;
   b.next = &c;
   c.next = &d;
   d.next = &e;
-  e.next = &f;
-  f.next = &g;
-
+  e.next = nullptr;
 //  3->3->1->2->4->null
   ListNode *p = &a;
-
-  a.show(20);
-  p = test.sortList(&a);
-  p->show(20);
-
-    return 0;
+  c.next = nullptr;
+  a.show(10);
+  test.reorderList(&a);
+  a.show(10);
+  return 0;
 }

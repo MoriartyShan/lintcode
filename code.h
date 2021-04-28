@@ -120,11 +120,65 @@ public:
    * @return: An integer
    */
     int maxDepth(TreeNode * root);
+  /**
+   * @param head: The head of linked list.
+   * @return: nothing
+   */
 
-    /**
-     * @param head: The head of linked list.
-     * @return: You should return the head of the sorted linked list, using constant space complexity.
-     */
-    ListNode * sortList(ListNode * head);
+  /**
+ * @param head: The head of linked list.
+ * @return: You should return the head of the sorted linked list, using constant space complexity.
+ */
+  ListNode * sortList(ListNode * head);
+
+  void reorderList(ListNode * head) {
+    // write your code here
+
+    uint32_t size = 0;
+    ListNode *tmp = head, *tmp2 = nullptr;
+    while (tmp != nullptr) {
+      size++;
+      tmp = tmp->next;
+    }
+
+    const uint32_t split_pos = (size + 1) >> 1;
+    const uint32_t right_size = size - split_pos;
+    tmp = head;
+    size = 0;
+    while (size != split_pos) {
+      size++;
+      tmp2 = tmp;
+      tmp = tmp->next;
+    }
+    if (tmp2 != nullptr) {
+      //new tail of head
+      tmp2->next = nullptr;
+    }
+
+
+    ///reverse
+    ListNode *right_head = nullptr;
+    while (tmp != nullptr) {
+      tmp2 = tmp->next;
+      tmp->next = right_head;
+      right_head = tmp;
+      tmp = tmp2;
+    }
+
+    head->show(10);
+    right_head->show(10);
+
+
+    tmp = head;
+    for (size_t i = 0; i < right_size; i++) {
+      tmp2 = tmp->next;
+      tmp->next = right_head;
+      right_head = right_head->next;
+      tmp->next->next = tmp2;
+      tmp = tmp2;
+    }
+
+
+  }
 };
 #endif //LINTCODE_CODE_H
