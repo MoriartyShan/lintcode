@@ -1,20 +1,18 @@
 #include "code.h"
 
-
+void show_vector(const std::vector<int>& v) {
+    LOG << "vector:";
+    for (auto m : v) {
+        std::cout << m << ",";
+    }
+    std::cout << std::endl;
+}
 
 int main() {
   Solution test;
-  ListNode a(3), b(2), c(1), d(0), e(4);
-  a.next = &b;
-  b.next = &c;
-  c.next = &d;
-  d.next = &e;
-  e.next = nullptr;
-//  3->3->1->2->4->null
-  ListNode *p = &a;
-  c.next = nullptr;
-  a.show(10);
-  test.reorderList(&a);
-  a.show(10);
+  std::vector<int> m = {-15,-7,-6,-1,1,2,6,11,15,15};
+  int n = test.removeDuplicates(m);
+  LOG << "-" << n << std::endl;
+  show_vector(m);
   return 0;
 }

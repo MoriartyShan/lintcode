@@ -132,5 +132,11 @@ public:
  * @return: nothing
  */
   void reorderList(ListNode * head);
+
+    /*
+   * @param nums: An ineger array
+   * @return: An integer
+   */
+    int removeDuplicates(vector<int> &nums);
 };
 #endif //LINTCODE_CODE_H

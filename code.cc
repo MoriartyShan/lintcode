@@ -512,3 +512,49 @@ void Solution::reorderList(ListNode * head) {
     tmp = tmp2;
   }
 }
+
+/*
+   * @param nums: An ineger array
+   * @return: An integer
+   */
+int Solution::removeDuplicates(vector<int> &nums) {
+  // write your code here
+  const size_t size = nums.size();
+  int *ptr = nums.data();
+  int begin = -1, end = -1;
+  for (size_t i = 1; i < size; i++) {
+    if (begin < 0) {
+      if (ptr[i] == ptr[i - 1]) {
+        begin = i - 1;
+      }
+    } else if (ptr[i] != ptr[i - 1]) {
+      end = i - 1;
+    }
+    if (end >= 0) {
+      for (size_t j = begin; j < end; j++) {
+        ptr[j] = std::numeric_limits<int>::max();
+      }
+      begin = -1;
+      end = -1;
+    }
+  }
+  if (begin >= 0) {
+    for (size_t i = begin + 1; i < size; i++) {
+      ptr[i] = std::numeric_limits<int>::max();
+    }
+  }
+
+  int cur = 0;
+  for (size_t i = 0; i < size; i++) {
+    if (ptr[i] == std::numeric_limits<int>::max()) {
+      continue;
+    } else if (i == cur) {
+      cur++;
+      continue;
+    }
+    ptr[cur] = ptr[i];
+    cur++;
+  }
+  nums.resize(cur);
+  return cur;
+}
