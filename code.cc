@@ -558,3 +558,37 @@ int Solution::removeDuplicates(vector<int> &nums) {
   nums.resize(cur);
   return cur;
 }
+
+int Solution::removeDuplicates2(vector<int> &nums) {
+  // write your code here
+  const size_t size = nums.size();
+  if (size == 0) {
+    return 0;
+  }
+  int *ptr = nums.data();
+  int begin = -1, cur_pos = 1;
+  for (size_t i = 1; i < size; i++) {
+    if (ptr[i] == ptr[i - 1]) {
+      if (begin < 0) {
+        begin = i;
+
+        if (i != cur_pos) {
+          ptr[cur_pos] = ptr[i];
+        }
+        cur_pos++;
+      } else  {
+        continue;
+      }
+    } else if (i != cur_pos) {
+      begin = -1;
+      ptr[cur_pos] = ptr[i];
+      cur_pos++;
+    } else {
+      begin = -1;
+      cur_pos++;
+    }
+  }
+
+  nums.resize(cur_pos);
+  return cur_pos;
+}

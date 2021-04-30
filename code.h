@@ -138,5 +138,11 @@ public:
    * @return: An integer
    */
     int removeDuplicates(vector<int> &nums);
+
+  /**
+  * @param A: a list of integers
+  * @return : return an integer
+  */
+  int removeDuplicates2(vector<int> &nums);
 };
 #endif //LINTCODE_CODE_H

@@ -10,8 +10,8 @@ void show_vector(const std::vector<int>& v) {
 
 int main() {
   Solution test;
-  std::vector<int> m = {-15,-7,-6,-1,1,2,6,11,15,15};
-  int n = test.removeDuplicates(m);
+  std::vector<int> m = {1, 1, 1, 1, 2, 2, 2,2 ,2};
+  int n = test.removeDuplicates2(m);
   LOG << "-" << n << std::endl;
   show_vector(m);
   return 0;
