@@ -592,3 +592,43 @@ int Solution::removeDuplicates2(vector<int> &nums) {
   nums.resize(cur_pos);
   return cur_pos;
 }
+
+bool Solution::hasCycle(ListNode * head) {
+  // write your code here
+#if 0
+  std::set<ListNode *> nodes;
+  while (head != nullptr) {
+    if (nodes.count(head) > 0) {
+      return true;
+    }
+    nodes.insert(head);
+    head = head->next;
+  }
+    return false;
+#else
+  //fast and low ptr
+
+  if (head == nullptr) {
+    return false;
+  }
+  ListNode *fast = head->next, *slow = head;
+
+  while (true) {
+    if (fast == nullptr) {
+      return false;
+    } else if (slow == fast) {
+      return true;
+    }
+
+    fast = fast->next;
+    if (fast != nullptr) {
+      fast = fast->next;
+    }
+    slow = slow->next;
+
+  }
+
+  return true;
+#endif
+
+}

@@ -144,5 +144,11 @@ public:
   * @return : return an integer
   */
   int removeDuplicates2(vector<int> &nums);
+
+  /**
+     * @param head: The first node of linked list.
+     * @return: True if it has a cycle, or false
+     */
+  bool hasCycle(ListNode * head);
 };
 #endif //LINTCODE_CODE_H
