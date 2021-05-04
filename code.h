@@ -150,5 +150,11 @@ public:
      * @return: True if it has a cycle, or false
      */
   bool hasCycle(ListNode * head);
+
+    /**
+   * @param lists: a list of ListNode
+   * @return: The head of one sorted list.
+   */
+    ListNode *mergeKLists(vector<ListNode *> &lists);
 };
 #endif //LINTCODE_CODE_H

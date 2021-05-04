@@ -632,3 +632,26 @@ bool Solution::hasCycle(ListNode * head) {
 #endif
 
 }
+
+ListNode *Solution::mergeKLists(vector<ListNode *> &lists) {
+  // write your code here
+  ListNode *first = nullptr, **current = &first;
+  while(true) {
+    int pos = -1;
+    for (int i = 0; i < lists.size(); i++) {
+      if (lists[i] != nullptr) {
+        if (pos < 0 || lists[i]->val < lists[pos]->val) {
+          pos = i;
+        }
+      }
+    }
+    if (pos >= 0) {
+      *current = lists[pos];
+      current = &(*current)->next;
+      lists[pos] = lists[pos]->next;
+    } else {
+      break;
+    }
+  }
+  return first;
+}
