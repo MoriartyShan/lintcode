@@ -10,9 +10,23 @@ void show_vector(const std::vector<int>& v) {
 
 int main() {
   Solution test;
-  std::vector<int> m = {1, 1, 1, 1, 2, 2, 2,2 ,2};
-  int n = test.removeDuplicates2(m);
+  RandomListNode a(1), b(2), c(3), d(4), e(5);
+  a.next = &b;
+  b.next = &c;
+  c.next = &d;
+  d.next = &e;
+
+
+  a.random = &e;
+  b.random = &d;
+  c.random = &c;
+  d.random = &b;
+  e.random = &a;
+
+
+  RandomListNode* n = test.copyRandomList(&a);
   LOG << "-" << n << std::endl;
-  show_vector(m);
+  RandomListNode::show(10, n);
+
   return 0;
 }

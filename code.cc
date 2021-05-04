@@ -635,6 +635,7 @@ bool Solution::hasCycle(ListNode * head) {
 
 ListNode *Solution::mergeKLists(vector<ListNode *> &lists) {
   // write your code here
+  /////Todo::merge each two lists may be faster
   ListNode *first = nullptr, **current = &first;
   while(true) {
     int pos = -1;
@@ -654,4 +655,40 @@ ListNode *Solution::mergeKLists(vector<ListNode *> &lists) {
     }
   }
   return first;
+}
+
+const RandomListNode *searchFromOrigin(const RandomListNode *origin, const RandomListNode *current, const RandomListNode *aim) {
+  if (aim != nullptr && current != nullptr) {
+    if (origin == aim) {
+      return current;
+    }
+    auto res = searchFromOrigin(origin->next, current->next, aim);
+    if (res != nullptr) {
+      return res;
+    }
+
+    res = searchFromOrigin(origin->random, current->random, aim);
+    if (res != nullptr) {
+      return res;
+    }
+  }
+  return nullptr;
+}
+
+void copyRandomList(
+    RandomListNode **new_head,
+    const RandomListNode *old_head,
+    RandomListNode **current,
+    RandomListNode *copy) {
+  if (copy != nullptr && (*current) == nullptr) {
+    auto res = searchFromOrigin(old_head, *new_head, copy);
+    if (res == nullptr) {
+      res = new RandomListNode(copy->label);
+    }
+    *current = (RandomListNode *)res;
+
+    copyRandomList(new_head, old_head, &(*current)->next, copy->next);
+    copyRandomList(new_head, old_head, &(*current)->random, copy->random);
+  }
+  return;
 }

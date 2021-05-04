@@ -12,9 +12,47 @@
 #include <set>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
 
+#define LOG cout << __FILE__ << ":" << __LINE__ << ":"
+
+/**
+ * Definition for singly-linked list with a random pointer.
+ */
+struct RandomListNode {
+   int label;
+   RandomListNode *next, *random;
+   RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
+  static void show(const int max, const RandomListNode* head) {
+    LOG << "show list:";
+    const RandomListNode* cur = head;
+    int c = 0;
+    while (c != max && cur != nullptr) {
+      std::cout << cur->label << ",";
+      cur = cur->next;
+      c++;
+    }
+    c = 0;
+    cur = head;
+    std::cout << "[";
+    while (c != max && cur != nullptr) {
+      if (cur->random != nullptr) {
+        std::cout << cur->random->label << ",";
+      } else {
+        std::cout << "null,";
+      }
+      cur = cur->next;
+      c++;
+    }
+    std::cout << "]\n";
+
+   }
+};
+void copyRandomList(
+    RandomListNode **new_head,
+    const RandomListNode *old_head,
+    RandomListNode **current,
+    RandomListNode *copy);
 /**
 * Definition of singly-linked-list:
  * */
@@ -60,7 +98,7 @@ public:
   }
 };
 
-#define LOG cout << __FILE__ << ":" << __LINE__ << ":"
+
 class Solution {
 
 public:
@@ -155,6 +193,17 @@ public:
    * @param lists: a list of ListNode
    * @return: The head of one sorted list.
    */
-    ListNode *mergeKLists(vector<ListNode *> &lists);
+  ListNode *mergeKLists(vector<ListNode *> &lists);
+
+  /**
+* @param head: The head of linked list with a random pointer.
+* @return: A new head of a deep copy of the list.
+*/
+  RandomListNode *copyRandomList(RandomListNode *head) {
+    // write your code here
+    RandomListNode *new_head = nullptr, *old_head = head, **current = &new_head;
+    ::copyRandomList(current, old_head, current, head);
+    return new_head;
+  }
 };
 #endif //LINTCODE_CODE_H
