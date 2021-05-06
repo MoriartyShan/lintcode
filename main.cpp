@@ -10,23 +10,16 @@ void show_vector(const std::vector<int>& v) {
 
 int main() {
   Solution test;
-  RandomListNode a(1), b(2), c(3), d(4), e(5);
+  ListNode a(4), b(21), c(25), d(25), e(31);
   a.next = &b;
   b.next = &c;
+
   c.next = &d;
   d.next = &e;
+  b.next = nullptr;
+  TreeNode* n = test.sortedListToBST(&a);
 
-
-  a.random = &e;
-  b.random = &d;
-  c.random = &c;
-  d.random = &b;
-  e.random = &a;
-
-
-  RandomListNode* n = test.copyRandomList(&a);
-  LOG << "-" << n << std::endl;
-  RandomListNode::show(10, n);
+  LOG << test.serialize(n);
 
   return 0;
 }
