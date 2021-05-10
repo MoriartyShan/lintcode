@@ -13,6 +13,7 @@
 #include <vector>
 #include <algorithm>
 #include <queue>
+#include <unordered_set>
 using namespace std;
 
 #define LOG cout << __FILE__ << ":" << __LINE__ << ":"
@@ -230,5 +231,61 @@ public:
     * @return: a tree node
     */
   TreeNode * sortedListToBST(ListNode * head);
+
+  bool wordBread(
+      const size_t from, const string &s, const unordered_set<string> &wordSet,
+      std::vector<std::vector<int8_t>> &memory) {
+    const size_t length = s.length();
+    LOG << "from = " << from << std::endl;
+    if (from == length) {
+      return true;
+    }
+
+    auto &row = memory[from];
+    bool res = false;
+    for (size_t i = from + 1; i <= length; i++) {
+      if (row[i - 1] == 0) {
+        const std::string sub = s.substr(from, i - from);
+        if (wordSet.find(sub) != wordSet.end()) {
+          row[i - 1] = 1;
+          LOG << "[" << from << "][" << i - 1 << "] = " << (int)row[i - 1] << "," << sub << "," << from << "," << i <<  std::endl;
+          res = wordBread(i, s, wordSet, memory);
+          if (res) {
+            return true;
+          }
+        } else {
+          row[i - 1] = -1;
+          LOG << "[" << from << "][" << i - 1 << "] = " << (int)row[i - 1] << "," << sub << "," << from << "," << i <<  "-" << s.substr(1, 2) << std::endl;
+        }
+      } else if (row[i - 1] == 1) {
+        LOG << "[" << from << "][" << i - 1 << "] = " << (int)row[i - 1] << "," << s.substr(from, i) << "," << from << "," << i <<  std::endl;
+        res = wordBread(i, s, wordSet, memory);
+        if (res) {
+          return true;
+        }
+      }
+
+    }
+    return false;
+  }
+
+  /**
+     * @param s: A string
+     * @param wordSet: A dictionary of words dict
+     * @return: A boolean
+     */
+  bool wordBreak(string &s, unordered_set<string> &wordSet) {
+    // write your code here
+    if (s.empty()) {
+      return true;
+    }
+    if (wordSet.empty()) {
+      return false;
+    }
+    const size_t size = s.length();
+    std::vector<std::vector<int8_t>> memory(size, std::vector<int8_t>(size, 0));
+    return wordBread(0, s, wordSet, memory);
+
+  }
 };
 #endif //LINTCODE_CODE_H

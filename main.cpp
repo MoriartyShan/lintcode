@@ -10,16 +10,12 @@ void show_vector(const std::vector<int>& v) {
 
 int main() {
   Solution test;
-  ListNode a(4), b(21), c(25), d(25), e(31);
-  a.next = &b;
-  b.next = &c;
+  std::string s = "aaab";
+  unordered_set<string> wordSet;
+  wordSet.emplace("a");wordSet.emplace("b");
+ bool res = test.wordBreak(s, wordSet);
 
-  c.next = &d;
-  d.next = &e;
-  b.next = nullptr;
-  TreeNode* n = test.sortedListToBST(&a);
-
-  LOG << test.serialize(n);
+  LOG << res << std::endl;
 
   return 0;
 }
