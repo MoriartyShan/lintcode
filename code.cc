@@ -840,3 +840,37 @@ TreeNode *Solution::sortedListToBST(ListNode * head) {
 
   return ::sortedListToBST(&cur, size);
 }
+
+bool wordBread(
+  const size_t from, const string &s, const unordered_set<string> &wordSet,
+  std::vector<bool> &memory) {
+  const size_t length = s.length();
+  if (from == length) {
+    return true;
+  }
+
+  if (memory[from]) {
+    return false;
+  }
+  memory[from] = true;
+  for (size_t i = from; i < length; i++) {
+    const std::string sub = s.substr(from, i - from + 1);
+    if ((wordSet.find(sub) != wordSet.end()) && wordBread(i + 1, s, wordSet, memory)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Solution::wordBreak(string &s, unordered_set<string> &wordSet) {
+  // write your code here
+  if (s.empty()) {
+    return true;
+  }
+  if (wordSet.empty()) {
+    return false;
+  }
+
+  std::vector<bool> memory(s.length(), false);
+  return wordBread(0, s, wordSet, memory);
+}
