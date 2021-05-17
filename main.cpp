@@ -10,10 +10,8 @@ void show_vector(const std::vector<int>& v) {
 
 int main() {
   Solution test;
-  std::string s = "a";
-  unordered_set<string> wordSet;
-  wordSet.emplace("a");//wordSet.emplace("b");
- bool res = test.wordBreak(s, wordSet);
+  std::string s = "ababababababababababababcbabababababababababababa";
+  int res = test.minCut(s);
 
   LOG << res << std::endl;
 
