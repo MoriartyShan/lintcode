@@ -21,6 +21,7 @@ using namespace std;
 /**
  * Definition for singly-linked list with a random pointer.
  */
+namespace lintcode{
 struct RandomListNode {
    int label;
    RandomListNode *next, *random;
@@ -205,7 +206,7 @@ public:
   RandomListNode *copyRandomList(RandomListNode *head) {
     // write your code here
     RandomListNode *new_head = nullptr, *old_head = head, **current = &new_head;
-    ::copyRandomList(current, old_head, current, head);
+    lintcode::copyRandomList(current, old_head, current, head);
     return new_head;
   }
 
@@ -244,54 +245,12 @@ public:
 
 
 
-  int minCut(const string &s, std::vector<std::vector<int8_t>> &memory, const int from) {
-    LOG << "from :" << from << std::endl;
-    const int length = s.length() - from;
-    if (length < 2) {
-      return 0;
-    }
-    auto isPalindrome = [&](const int to) {
-      for (int i = from, j = to; i < j; i++, j--) {
-        if (s[i] != s[j]) {
-          return false;
-        }
-      }
-      return true;
-    };
-    int min_cut = -1;
-    for (int i = length - 1; i >= 0; i--) {
-//      LOG << "i = " << i << std::endl;
-      int8_t &flag = memory[from][i];
-      if (flag == 0) {
-        if (isPalindrome(i + from)) {
-          flag = 1;
-        } else {
-          flag = -1;
-        }
-      }
-      if (flag == 1) {
-        int cur_cut = minCut(s, memory, i + from + 1);
-
-        if (i < (length - 1)) {
-          cur_cut++;
-        }
-
-        if (min_cut < 0 || min_cut > cur_cut) {
-          min_cut = cur_cut;
-        }
-      }
-    }
-    return min_cut;
-  }
   /**
  * @param s: A string
  * @return: An integer
  */
-  int minCut(string &s) {
-    // write your code here
-    const size_t length = s.length();
-    std::vector<std::vector<int8_t>> memory(length, std::vector<int8_t>(length, 0));
-    return minCut(s, memory, 0);
-  }
+  int minCut(string &s);
 };
+
+}//namespace lintcode
 #endif //LINTCODE_CODE_H

@@ -9,7 +9,7 @@ void show_vector(const std::vector<int>& v) {
 }
 
 int main() {
-  Solution test;
+  lintcode::Solution test;
   std::string s = "ababababababababababababcbabababababababababababa";
   int res = test.minCut(s);
 

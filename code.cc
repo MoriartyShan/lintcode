@@ -13,16 +13,18 @@
             return true;\
         }\
     }
-bool Solution::isInterleave(const char* s[],  int* l, int start) {
+
+namespace lintcode {
+bool Solution::isInterleave(const char *s[], int *l, int start) {
   if (l[0] == l[1] && l[0] == 0 && l[2] == 0) return true;
   if (l[0] + l[1] != l[2]) {
     return false;
   }
   if (failed.count((uint64_t(l[0]) << 32) ^ l[1]) > 0) return false;
   int sl[3] = {l[0], l[1], l[2]};\
-        const char* ss[3] = {s[0], s[1], s[2]};\
+        const char *ss[3] = {s[0], s[1], s[2]};\
 
-  if(l[0] >= 0 && l[1] >= 0) {
+  if (l[0] >= 0 && l[1] >= 0) {
     if (start == 0) {
       JUDGE(0);
       JUDGE(1);
@@ -44,7 +46,7 @@ bool Solution::isInterleave(const char* s[],  int* l, int start) {
 bool Solution::isInterleave(string &s1, string &s2, string &s3) {
   // write your code here
   failed.clear();
-  int length[3] = {(int)s1.length(), (int)s2.length(), (int)s3.length()};
+  int length[3] = {(int) s1.length(), (int) s2.length(), (int) s3.length()};
   const char *str[3] = {s1.c_str(), s2.c_str(), s3.c_str()};
   return isInterleave(str, length);
 };
@@ -55,7 +57,8 @@ bool Solution::isInterleave(string &s1, string &s2, string &s3) {
 * @param newInterval: new interval.
 * @return: A new interval list.
 */
-vector<Interval> Solution::insert(vector<Interval> &intervals, Interval newInterval) {
+vector<Interval>
+Solution::insert(vector<Interval> &intervals, Interval newInterval) {
   // write your code here
 
   auto merge = [&intervals](Interval &a, Interval &b) {
@@ -123,7 +126,6 @@ vector<Interval> Solution::insert(vector<Interval> &intervals, Interval newInter
 }
 
 
-
 /*
  * @param n: The number of queens
  * @return: All distinct solutions
@@ -152,7 +154,7 @@ vector<vector<string>> Solution::solveNQueens(int n) {
 
   auto nQ = [](int s, int k) {
     std::string res;
-    for (int i = 0; i < s; i ++) {
+    for (int i = 0; i < s; i++) {
       if (i == k) {
         res += "Q";
       } else {
@@ -187,7 +189,7 @@ vector<vector<string>> Solution::solveNQueens(int n) {
       LOG << "size not right " << size << " " << res.size() << std::endl;
       return res;
     }
-  } while(next_number());
+  } while (next_number());
   if (res.size() < size) {
     exit(0);
   }
@@ -195,7 +197,7 @@ vector<vector<string>> Solution::solveNQueens(int n) {
 }
 
 //the max sum value that pass root
-int _maxPathSum(const TreeNode* root, int *cur_max){
+int _maxPathSum(const TreeNode *root, int *cur_max) {
   if (root == nullptr) {
     return 0;
   }
@@ -222,7 +224,7 @@ int _maxPathSum(const TreeNode* root, int *cur_max){
   return res;
 }
 
-int Solution::maxPathSum(TreeNode * root) {
+int Solution::maxPathSum(TreeNode *root) {
   // write your code here
   int cur_max = std::numeric_limits<int>::lowest();
   _maxPathSum(root, &cur_max);
@@ -230,7 +232,9 @@ int Solution::maxPathSum(TreeNode * root) {
 }
 
 
-void _backPack2(const int m, const int n, const int *A, const int size, int *cur_max, std::vector<bool> &flag) {
+void
+_backPack2(const int m, const int n, const int *A, const int size, int *cur_max,
+           std::vector<bool> &flag) {
   if (m == *cur_max || size == 0 || m == 0 || n >= m) {
     return;
   }
@@ -245,7 +249,7 @@ void _backPack2(const int m, const int n, const int *A, const int size, int *cur
       _backPack2(m, sum, A + i + 1, size - i - 1, cur_max, flag);
     }
   }
-  return ;
+  return;
 }
 
 
@@ -287,12 +291,14 @@ int Solution::backPack(int m, vector<int> &A) {
   int res = std::numeric_limits<int>::lowest();
   std::vector<bool> flag(m, false);
 
-  _backPack2(m, (int)0, A.data(), (int)A.size(), &res, flag);
+  _backPack2(m, (int) 0, A.data(), (int) A.size(), &res, flag);
   return res;
 #endif
 }
 
-bool isValidBST(TreeNode * root, const int max, const int min, const bool has_max, const bool has_min) {
+bool
+isValidBST(TreeNode *root, const int max, const int min, const bool has_max,
+           const bool has_min) {
   bool res = true;
   if (root == nullptr) {
     return res;
@@ -325,13 +331,15 @@ bool isValidBST(TreeNode * root, const int max, const int min, const bool has_ma
      * @param root: The root of binary tree.
      * @return: True if the binary tree is BST, or false
      */
-bool Solution::isValidBST(TreeNode * root) {
+bool Solution::isValidBST(TreeNode *root) {
   // write your code here
-  return ::isValidBST(root, std::numeric_limits<int>::max(), std::numeric_limits<int>::lowest(), false, false);
+  return lintcode::isValidBST(root, std::numeric_limits<int>::max(),
+                      std::numeric_limits<int>::lowest(), false, false);
 }
 
 
-ListNode * partition(ListNode* head, const int x, ListNode** left, ListNode** right) {
+ListNode *
+partition(ListNode *head, const int x, ListNode **left, ListNode **right) {
   if (head == nullptr) {
     if ((*left) != nullptr) {
       (*left) = nullptr;
@@ -356,10 +364,10 @@ ListNode * partition(ListNode* head, const int x, ListNode** left, ListNode** ri
  * @param x: An integer
  * @return: A ListNode
  */
-ListNode * Solution::partition(ListNode * head, int x) {
+ListNode *Solution::partition(ListNode *head, int x) {
   // write your code here
   ListNode *left = nullptr, *right = nullptr;
-  ::partition(head, x, &left, &right);
+  lintcode::partition(head, x, &left, &right);
   right->show(5);
   left->show(5);
   {
@@ -382,90 +390,92 @@ ListNode * Solution::partition(ListNode * head, int x) {
 * @param root: The root of binary tree.
 * @return: An integer
 */
-int Solution::maxDepth(TreeNode * root) {
-    // write your code here
+int Solution::maxDepth(TreeNode *root) {
+  // write your code here
 #if 0
-    if (root == nullptr) {
-        return 0;
-    }
-    int left = 1 + maxDepth(root->left);
-    int right = 1 + maxDepth(root->right);
-    return (left > right) ? left : right;
+  if (root == nullptr) {
+      return 0;
+  }
+  int left = 1 + maxDepth(root->left);
+  int right = 1 + maxDepth(root->right);
+  return (left > right) ? left : right;
 #else
-    int depth = 0;
-    while(root != nullptr) {
-        depth++;
+  int depth = 0;
+  while (root != nullptr) {
+    depth++;
 
-    }
+  }
 
 
 #endif
 }
 
-int find_min(ListNode * head) {
-    int max = head->val;
-    int min = head->val;
+int find_min(ListNode *head) {
+  int max = head->val;
+  int min = head->val;
 }
 
 
-ListNode * partition(ListNode* head, const int x, ListNode** left, ListNode** equal, ListNode** right) {
-    if (head == nullptr) {
-        if ((*left) != nullptr) {
-            (*left) = nullptr;
-        }
-        if ((*equal) != nullptr) {
-            (*equal) = nullptr;
-        }
-        if ((*right) != nullptr) {
-            (*right) = nullptr;
-        }
-        return head;
-    } else if (head->val > x) {
-
-        *right = head;
-        return partition(head->next, x, left, equal, &head->next);
-    } else if (head->val == x) {
-        *equal = head;
-        return partition(head->next, x, left, &head->next, right);
+ListNode *
+partition(ListNode *head, const int x, ListNode **left, ListNode **equal,
+          ListNode **right) {
+  if (head == nullptr) {
+    if ((*left) != nullptr) {
+      (*left) = nullptr;
     }
+    if ((*equal) != nullptr) {
+      (*equal) = nullptr;
+    }
+    if ((*right) != nullptr) {
+      (*right) = nullptr;
+    }
+    return head;
+  } else if (head->val > x) {
 
-    *left = head;
-    return partition(head->next, x, &head->next, equal, right);
+    *right = head;
+    return partition(head->next, x, left, equal, &head->next);
+  } else if (head->val == x) {
+    *equal = head;
+    return partition(head->next, x, left, &head->next, right);
+  }
+
+  *left = head;
+  return partition(head->next, x, &head->next, equal, right);
 }
 
 /**
  * @param head: The head of linked list.
  * @return: You should return the head of the sorted linked list, using constant space complexity.
  */
-ListNode * Solution::sortList(ListNode * head) {
-    // write your code here
-    auto cat = [](ListNode *left, ListNode *right) {
-        ListNode *left_tail = left;
-        while (left_tail != nullptr && left_tail->next != nullptr) {
-            left_tail = left_tail->next;
-        }
-        if (left_tail != nullptr) {
-            left_tail->next = right;
-        } else {
-            left = right;
-        }
-        return left;
-    };
-
-    if (head != nullptr) {
-        ListNode *left = nullptr, *right = nullptr, *equal = nullptr;
-        ::partition(head, head->val, &left, &equal, &right);
-        left = sortList(left);
-        right = sortList(right);
-
-        equal = cat(equal, right);
-        left = cat(left, equal);
-        return left;
+ListNode *Solution::sortList(ListNode *head) {
+  // write your code here
+  auto cat = [](ListNode *left, ListNode *right) {
+    ListNode *left_tail = left;
+    while (left_tail != nullptr && left_tail->next != nullptr) {
+      left_tail = left_tail->next;
     }
-    return nullptr;
+    if (left_tail != nullptr) {
+      left_tail->next = right;
+    } else {
+      left = right;
+    }
+    return left;
+  };
+
+  if (head != nullptr) {
+    ListNode *left = nullptr, *right = nullptr, *equal = nullptr;
+    lintcode::partition(head, head->val, &left, &equal, &right);
+    left = sortList(left);
+    right = sortList(right);
+
+    equal = cat(equal, right);
+    left = cat(left, equal);
+    return left;
+  }
+  return nullptr;
 }
 
-void Solution::reorderList(ListNode * head) {
+void Solution::reorderList(ListNode *head) {
   // write your code here
 
   uint32_t size = 0;
@@ -576,7 +586,7 @@ int Solution::removeDuplicates2(vector<int> &nums) {
           ptr[cur_pos] = ptr[i];
         }
         cur_pos++;
-      } else  {
+      } else {
         continue;
       }
     } else if (i != cur_pos) {
@@ -593,7 +603,7 @@ int Solution::removeDuplicates2(vector<int> &nums) {
   return cur_pos;
 }
 
-bool Solution::hasCycle(ListNode * head) {
+bool Solution::hasCycle(ListNode *head) {
   // write your code here
 #if 0
   std::set<ListNode *> nodes;
@@ -637,7 +647,7 @@ ListNode *Solution::mergeKLists(vector<ListNode *> &lists) {
   // write your code here
   /////Todo::merge each two lists may be faster
   ListNode *first = nullptr, **current = &first;
-  while(true) {
+  while (true) {
     int pos = -1;
     for (int i = 0; i < lists.size(); i++) {
       if (lists[i] != nullptr) {
@@ -657,7 +667,9 @@ ListNode *Solution::mergeKLists(vector<ListNode *> &lists) {
   return first;
 }
 
-const RandomListNode *searchFromOrigin(const RandomListNode *origin, const RandomListNode *current, const RandomListNode *aim) {
+const RandomListNode *
+searchFromOrigin(const RandomListNode *origin, const RandomListNode *current,
+                 const RandomListNode *aim) {
   if (aim != nullptr && current != nullptr) {
     if (origin == aim) {
       return current;
@@ -676,16 +688,16 @@ const RandomListNode *searchFromOrigin(const RandomListNode *origin, const Rando
 }
 
 void copyRandomList(
-    RandomListNode **new_head,
-    const RandomListNode *old_head,
-    RandomListNode **current,
-    RandomListNode *copy) {
+  RandomListNode **new_head,
+  const RandomListNode *old_head,
+  RandomListNode **current,
+  RandomListNode *copy) {
   if (copy != nullptr && (*current) == nullptr) {
     auto res = searchFromOrigin(old_head, *new_head, copy);
     if (res == nullptr) {
       res = new RandomListNode(copy->label);
     }
-    *current = (RandomListNode *)res;
+    *current = (RandomListNode *) res;
 
     copyRandomList(new_head, old_head, &(*current)->next, copy->next);
     copyRandomList(new_head, old_head, &(*current)->random, copy->random);
@@ -693,13 +705,13 @@ void copyRandomList(
   return;
 }
 
-string Solution::serialize(TreeNode * root) {
+string Solution::serialize(TreeNode *root) {
   // write your code here
   string res = "{";
   std::queue<TreeNode *> keep;
   if (root)
     keep.push(root);
-  while(keep.size() > 0) {
+  while (keep.size() > 0) {
     root = keep.front();
     keep.pop();
     if (root != nullptr) {
@@ -713,7 +725,7 @@ string Solution::serialize(TreeNode * root) {
 
   int last = res.length();
   if (last >= 2) {
-    while(res.substr(last - 2, 2) == "#,") {
+    while (res.substr(last - 2, 2) == "#,") {
       last = last - 2;
     }
     res.erase(last);
@@ -733,12 +745,12 @@ string Solution::serialize(TreeNode * root) {
  * designed by yourself, and deserialize it here as you serialize it in
  * "serialize" method.
  */
-TreeNode * Solution::deserialize(string &data) {
+TreeNode *Solution::deserialize(string &data) {
   // write your code here
 
   auto findLast = [](
-    std::queue<TreeNode*> &cur,
-    std::queue<TreeNode*> &buf) {
+    std::queue<TreeNode *> &cur,
+    std::queue<TreeNode *> &buf) {
     TreeNode *current = nullptr;
     if (cur.size() == 0) {
       buf.swap(cur);
@@ -754,7 +766,7 @@ TreeNode * Solution::deserialize(string &data) {
   int cur = 0, subLength = 0;
   cur++;
   const int l = data.length();
-  std::queue<TreeNode*> current_, swap_;
+  std::queue<TreeNode *> current_, swap_;
   TreeNode *root = nullptr, *tmp = nullptr;
   bool cur_side = true; //true=>left, false=>right
 
@@ -805,14 +817,14 @@ TreeNode * Solution::deserialize(string &data) {
   return root;
 }
 
-TreeNode * sortedListToBST(ListNode **_head_ptr, const int num) {
+TreeNode *sortedListToBST(ListNode **_head_ptr, const int num) {
   ListNode *head = *_head_ptr;
   ///check head != nullptr outside this function
 
   if (num == 0) {
     return nullptr;
   } else if (num == 1) {
-    TreeNode* node = new TreeNode(head->val);
+    TreeNode *node = new TreeNode(head->val);
     (*_head_ptr) = head->next;
     return node;
   }
@@ -826,7 +838,7 @@ TreeNode * sortedListToBST(ListNode **_head_ptr, const int num) {
   return middle;
 }
 
-TreeNode *Solution::sortedListToBST(ListNode * head) {
+TreeNode *Solution::sortedListToBST(ListNode *head) {
   // write your code here
 
   ///count size
@@ -838,7 +850,7 @@ TreeNode *Solution::sortedListToBST(ListNode * head) {
   }
   cur = head;
 
-  return ::sortedListToBST(&cur, size);
+  return lintcode::sortedListToBST(&cur, size);
 }
 
 bool wordBread(
@@ -855,7 +867,8 @@ bool wordBread(
   memory[from] = true;
   for (size_t i = from; i < length; i++) {
     const std::string sub = s.substr(from, i - from + 1);
-    if ((wordSet.find(sub) != wordSet.end()) && wordBread(i + 1, s, wordSet, memory)) {
+    if ((wordSet.find(sub) != wordSet.end()) &&
+        wordBread(i + 1, s, wordSet, memory)) {
       return true;
     }
   }
@@ -874,3 +887,65 @@ bool Solution::wordBreak(string &s, unordered_set<string> &wordSet) {
   std::vector<bool> memory(s.length(), false);
   return wordBread(0, s, wordSet, memory);
 }
+
+int minCut(const string &s, std::vector<std::vector<int8_t>> &memory,
+           std::vector<int> &min_cuts, const int from) {
+//    LOG << "from :" << from << std::endl;
+  const int length = s.length() - from;
+  if (length < 2) {
+    return 0;
+  }
+
+  if (min_cuts[from] >= 0) {
+    return min_cuts[from];
+  }
+
+  auto isPalindrome = [&](const int to) {
+    for (int i = from, j = to; i < j; i++, j--) {
+      if (s[i] != s[j]) {
+        return false;
+      }
+    }
+    return true;
+  };
+  int min_cut = -1;
+  for (int i = length - 1; i >= 0; i--) {
+//      LOG << "i = " << i << std::endl;
+    int8_t &flag = memory[from][i];
+    if (flag == 0) {
+      if (isPalindrome(i + from)) {
+        flag = 1;
+      } else {
+        flag = -1;
+      }
+    }
+    if (flag == 1) {
+      int cur_cut = minCut(s, memory, min_cuts, i + from + 1);
+
+      if (i < (length - 1)) {
+        cur_cut++;
+      }
+
+      if (min_cut < 0 || min_cut > cur_cut) {
+        min_cut = cur_cut;
+      }
+    }
+  }
+  LOG << "mincut[" << from << "] = " << min_cut << std::endl;
+  min_cuts[from] = min_cut;
+  return min_cut;
+}
+
+/**
+* @param s: A string
+* @return: An integer
+*/
+int Solution::minCut(string &s) {
+  // write your code here
+  const size_t length = s.length();
+  std::vector<std::vector<int8_t>> memory(length,
+                                          std::vector<int8_t>(length, 0));
+  std::vector<int> min_cuts(length, -1);
+  return lintcode::minCut(s, memory, min_cuts, 0);
+}
+}//namespace lintcode
