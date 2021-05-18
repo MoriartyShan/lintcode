@@ -242,14 +242,17 @@ public:
      */
   bool wordBreak(string &s, unordered_set<string> &wordSet);
 
-
-
-
   /**
  * @param s: A string
  * @return: An integer
  */
   int minCut(string &s);
+
+  /**
+ * @param triangle: a list of lists of integers
+ * @return: An integer, minimum path sum
+ */
+  int minimumTotal(vector<vector<int>> &triangle);
 };
 
 }//namespace lintcode

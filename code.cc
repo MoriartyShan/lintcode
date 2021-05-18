@@ -948,4 +948,37 @@ int Solution::minCut(string &s) {
   std::vector<int> min_cuts(length, -1);
   return lintcode::minCut(s, memory, min_cuts, 0);
 }
+
+int Solution::minimumTotal(vector<vector<int>> &triangle) {
+  // write your code here
+  const int level_num = triangle.size();
+  if (level_num == 0) {
+    return 0;
+  } else if (level_num == 1) {
+    return triangle[0][0];
+  }
+
+  vector<vector<int>> memory;
+  for (auto& t : triangle) {
+    memory.emplace_back(vector<int>(t.size(), -1));
+  }
+  memory.back() = triangle.back();
+
+  for (int i = level_num - 2; i >= 0; i--) {
+    const int num_size = i + 1;
+    const vector<int> &t = triangle[i];
+    vector<int> &m = memory[i];
+    const vector<int> &m_next = memory[i + 1];
+
+    for (int j = 0; j < num_size; j++) {
+      if (m_next[j] < m_next[j + 1]) {
+        m[j] = t[j] + m_next[j];
+      } else {
+        m[j] = t[j] + m_next[j + 1];
+      }
+    }
+  }
+
+  return memory[0][0];
+}
 }//namespace lintcode
