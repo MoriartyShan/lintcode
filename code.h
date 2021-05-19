@@ -77,7 +77,7 @@ public:
         break;
       }
     }
-    std::cout << std::endl;
+    std::cout << "nullptr" << std::endl;
   }
 };
 
@@ -253,6 +253,31 @@ public:
  * @return: An integer, minimum path sum
  */
   int minimumTotal(vector<vector<int>> &triangle);
+
+    /**
+   * @param grid: a list of lists of integers
+   * @return: An integer, minimizes the sum of all numbers along its path
+   */
+  int minPathSum(vector<vector<int>> &grid);
+
+
+  /**
+* @param n: An integer
+* @return: An integer
+*/
+  int climbStairs(int n);
+
+  /**
+ * @param head: head is the head of the linked list
+ * @return: head of linked list
+ */
+  ListNode * deleteDuplicates(ListNode * head);
+
+  /**
+ * @param head: head is the head of the linked list
+ * @return: head of the linked list
+ */
+  ListNode * deleteDuplicates2(ListNode * head);
 };
 
 }//namespace lintcode

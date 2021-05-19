@@ -981,4 +981,152 @@ int Solution::minimumTotal(vector<vector<int>> &triangle) {
 
   return memory[0][0];
 }
+
+int minPathSum(vector<vector<int>> &grid, vector<vector<int>> &memory, const int x, const int y) {
+  // write your code here
+  if (x >= grid.size() || y >= grid.front().size()) {
+    return -1;
+  }
+
+
+  int &m = memory[x][y];
+  if (m < 0) {
+    int right = minPathSum(grid, memory, x+1, y);
+    int down = minPathSum(grid, memory, x, y+1);
+    if (right >= 0) {
+      m = right;
+    }
+    if (down >= 0) {
+      if (m >= 0 && down > m) {
+
+      } else {
+        m = down;
+      }
+    }
+    m = m + grid[x][y];
+  }
+  return m;
+}
+/**
+* @param grid: a list of lists of integers
+* @return: An integer, minimizes the sum of all numbers along its path
+*/
+int Solution::minPathSum(vector<vector<int>> &grid) {
+  // write your code here
+  vector<vector<int>> memory = vector<vector<int>>(grid.size(), vector<int>(grid.front().size(), -1));
+  memory.back().back() = grid.back().back();
+  int s = lintcode::minPathSum(grid, memory, 0, 0);
+  return s < 0 ? 0 : s;
+}
+
+int Solution::climbStairs(int n) {
+  // write your code here
+  if (n == 0) {
+    return 0;
+  } else if (n == 1) {
+    return 1;
+  } else if (n == 2) {
+    return 2;
+  }
+
+  std::vector<int> memory(n, -1);
+
+  memory[0] = 1;
+  memory[1] = 2;
+
+  for (int i = 2; i < n; i++) {
+    memory[i] = memory[i - 2] + memory[i - 1];
+  }
+
+  return memory[n - 1];
+}
+
+ListNode * Solution::deleteDuplicates(ListNode * head) {
+  // write your code here
+  if (head == nullptr) {
+    return nullptr;
+  }
+  ListNode *cur_tail = head, *cur_next = head->next;
+
+  while (cur_next != nullptr) {
+    if (cur_tail->val == cur_next->val) {
+      cur_next = cur_next->next;
+    } else {
+      if (cur_tail->next != cur_next) {
+        cur_tail->next = cur_next;
+      }
+      cur_tail = cur_tail->next;
+      cur_next = cur_next->next;
+    }
+  }
+  cur_tail->next = nullptr;
+  return head;
+}
+
+ListNode *Solution::deleteDuplicates2(ListNode * head) {
+  // write your code here
+
+  auto removeHead = [&head]() {
+    bool remove_head = false;
+    if (head == nullptr) {
+      return remove_head;
+    }
+    while(head->next != nullptr && head->val == head->next->val) {
+      head = head->next;
+      remove_head = true;
+    }
+    if (remove_head) {
+      head = head->next;
+      LOG << "head is duplicated" << std::endl;
+      return true;
+    }
+    return false;
+  };
+
+  while (removeHead()) {
+  }
+
+  if (head == nullptr) {
+    return nullptr;
+  }
+  ListNode *cur_tail = head, *cur_next = head->next, *duplicate = nullptr;
+
+
+  int dul = 0;
+  while (cur_next != nullptr) {
+    if (duplicate != nullptr) {
+      if (cur_next->val == duplicate->val) {
+        cur_next = cur_next->next;
+        dul++;
+      } else {
+        LOG << "duplicate: " << duplicate->val << "," << dul << std::endl;
+        dul = 0;
+        duplicate = nullptr;
+      }
+    }
+    if (duplicate == nullptr) {
+      if (cur_next->next != nullptr) {
+        if (cur_next->val == cur_next->next->val) {
+          duplicate = cur_next;
+          cur_next = cur_next->next->next;
+          dul = 2;
+          LOG << "found duplicate " << duplicate->val << std::endl;
+        } else {
+          LOG << "attach " << cur_next->val << "" << std::endl;
+          cur_tail->next = cur_next;
+          cur_tail = cur_next;
+          cur_next = cur_next->next;
+        }
+      } else {
+        LOG << "attach " << cur_next->val << "" << std::endl;
+        cur_tail->next = cur_next;
+        cur_tail = cur_next;
+        cur_next = cur_next->next;
+      }
+    }
+  }
+
+  cur_tail->next = nullptr;
+  return head;
+}
 }//namespace lintcode
