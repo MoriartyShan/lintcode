@@ -22,9 +22,11 @@ int main() {
   i.next = &j;
 //  h.next = &f;
 //  h.next = &f;
-  a.show(10);
-  lintcode::ListNode *head = test.deleteDuplicates2(&a);
-  head->show(10);
+  //a.show(10);
+  //lintcode::ListNode *head = test.deleteDuplicates2(&a);
+  std::vector<int> v = {1,2,0,3,4,5};
+
+  LOG << test.canJump(v);
 
   return 0;
 }

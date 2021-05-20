@@ -278,6 +278,27 @@ public:
  * @return: head of the linked list
  */
   ListNode * deleteDuplicates2(ListNode * head);
+
+  /**
+ * @param m: positive integer (1 <= m <= 100)
+ * @param n: positive integer (1 <= n <= 100)
+ * @return: An integer
+ */
+  int uniquePaths(int m, int n);
+
+
+  /**
+   * @param obstacleGrid: A list of lists of integers
+   * @return: An integer
+   */
+  int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid);
+
+  /**
+ * @param A: A list of integers
+ * @return: A boolean
+ */
+  bool canJump(vector<int> &A);
+
 };
 
 }//namespace lintcode

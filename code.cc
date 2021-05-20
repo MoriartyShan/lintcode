@@ -1129,4 +1129,126 @@ ListNode *Solution::deleteDuplicates2(ListNode * head) {
   cur_tail->next = nullptr;
   return head;
 }
+
+
+int uniquePaths(std::vector<std::vector<int>> &memory, int m, int n) {
+  if ((memory.size() <= (m)) || (memory.front().size() <= (n))) {
+    return 0;
+  }
+  auto &mem = memory[m][n];
+  if (mem < 0) {
+    int right = lintcode::uniquePaths(memory, m, n + 1);
+    int down = lintcode::uniquePaths(memory, m + 1, n);
+    LOG << "right[" << m << "," << n+1 << "] = " << right << std::endl;
+    LOG << "down[" << m + 1 << "," << n << "] = " << down << std::endl;
+    mem = right + down;
+  }
+  LOG << "mem[" << m << "," << n << "] = " << mem << std::endl;
+  return mem;
+}
+
+/**
+* @param m: positive integer (1 <= m <= 100)
+* @param n: positive integer (1 <= n <= 100)
+* @return: An integer
+*/
+int Solution::uniquePaths(int m, int n) {
+  // write your code here
+
+  if (m == 1 || n == 1) {
+    return 1;
+  } else if (m == 0 || n == 0) {
+    return 0;
+  }
+
+  std::vector<std::vector<int>> memory(
+    std::vector<std::vector<int>>(m, std::vector<int>(n, -1)));
+  memory.back() = std::vector<int>(n, 1);
+
+  return lintcode::uniquePaths(memory, 0, 0);
+}
+
+
+int uniquePathsWithObstacles(
+  const vector<vector<int>> &obstacleGrid,
+  std::vector<std::vector<int>> &memory, int m, int n) {
+  if ((memory.size() <= (m)) || (memory.front().size() <= (n))) {
+    return 0;
+  }
+  auto &mem = memory[m][n];
+  if (mem < 0) {
+    if (obstacleGrid[m][n] == 0) {
+      int right = lintcode::uniquePathsWithObstacles(obstacleGrid, memory, m, n + 1);
+      int down = lintcode::uniquePathsWithObstacles(obstacleGrid, memory, m + 1, n);
+//        LOG << "right[" << m << "," << n+1 << "] = " << right << std::endl;
+//        LOG << "down[" << m + 1 << "," << n << "] = " << down << std::endl;
+      mem = right + down;
+    } else {
+      mem = 0;
+    }
+  }
+//    LOG << "mem[" << m << "," << n << "] = " << mem << std::endl;
+  return mem;
+}
+
+/**
+ * @param obstacleGrid: A list of lists of integers
+ * @return: An integer
+ */
+int Solution::uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid) {
+  // write your code here
+  if (1 == obstacleGrid.back().back() || obstacleGrid.empty() || obstacleGrid.front().empty()) {
+    return 0;
+  }
+  std::vector<std::vector<int>> memory(
+    std::vector<std::vector<int>>(
+      obstacleGrid.size(), std::vector<int>(obstacleGrid.front().size(), -1)));
+  memory.back().back() = 1;
+  return lintcode::uniquePathsWithObstacles(obstacleGrid, memory, 0, 0);
+}
+
+bool canJump(const vector<int> &A, vector<int> &B) {
+
+
+}
+
+/**
+* @param A: A list of integers
+* @return: A boolean
+*/
+bool Solution::canJump(vector<int> &A) {
+  // write your code here
+  const int size = A.size();
+  if (size <= 1) {
+    return true;
+  }
+
+  std::vector<int8_t> B(size, -1);
+
+  for (int i = size - 1; i >= 0; i--) {
+    int dist = size - i - 1;
+    if (A[i] >= dist) {
+      B[i] = 1;
+      LOG << "B[" << i << "] can\n";
+    } else if (A[i] == 0) {
+      B[i] = 0;
+      LOG << "B[" << i << "] cannot\n";
+    } else {
+      const int last = A[i] + i;
+      for (int j = i + 1; j <= last; j++) {
+        if (B[j] == 1) {
+          B[i] = 1;
+          LOG << "B[" << i << "] can\n";
+          break;
+        }
+      }
+      if (B[i] != 1) {
+        B[i] = 0;
+        LOG << "B[" << i << "] cannot\n";
+      }
+    }
+  }
+  return (B[0] == 1);
+
+}
 }//namespace lintcode
