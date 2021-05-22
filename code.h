@@ -22,6 +22,8 @@ using namespace std;
  * Definition for singly-linked list with a random pointer.
  */
 namespace lintcode{
+void show_vector(const std::vector<int>& v);
+
 struct RandomListNode {
    int label;
    RandomListNode *next, *random;
@@ -298,6 +300,26 @@ public:
  * @return: A boolean
  */
   bool canJump(vector<int> &A);
+
+  /**
+ * @param A: A list of integers
+ * @return: An integer
+ */
+  int jump(vector<int> &A);
+
+  /**
+ * @param S: A string
+ * @param T: A string
+ * @return: Count the number of distinct subsequences
+ */
+  int numDistinct(string &S, string &T);
+
+  /**
+ * @param word1: A string
+ * @param word2: A string
+ * @return: The minimum number of steps.
+ */
+  int minDistance(string &word1, string &word2);
 
 };
 

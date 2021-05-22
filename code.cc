@@ -15,6 +15,15 @@
     }
 
 namespace lintcode {
+
+void show_vector(const std::vector<int>& v) {
+  LOG << "vector:";
+  for (auto m : v) {
+    std::cout << m << ",";
+  }
+  std::cout << std::endl;
+}
+
 bool Solution::isInterleave(const char *s[], int *l, int start) {
   if (l[0] == l[1] && l[0] == 0 && l[2] == 0) return true;
   if (l[0] + l[1] != l[2]) {
@@ -1250,5 +1259,132 @@ bool Solution::canJump(vector<int> &A) {
   }
   return (B[0] == 1);
 
+}
+
+int Solution::jump(vector<int> &A) {
+  // write your code here
+
+  const int size = A.size();
+  if (size <= 1) {
+    return 0;
+  }
+
+  std::vector<int> B(size, -1);
+
+  for (int i = size - 1; i >= 0; i--) {
+    int dist = size - i - 1;
+    if (A[i] >= dist) {
+      B[i] = 1;
+//        LOG << "B[" << i << "] can\n";
+    } else if (A[i] == 0) {
+      B[i] = 0;
+//        LOG << "B[" << i << "] cannot\n";
+    } else {
+      const int last = A[i] + i;
+      for (int j = i + 1; j <= last; j++) {
+        if (B[j] > 0) {
+          if (B[i] < 0 || B[i] > (B[j] + 1)) {
+            B[i] = B[j] + 1;
+          }
+//            LOG << "B[" << i << "] can\n";
+        }
+      }
+      if (B[i] < 0) {
+        B[i] = 0;
+//          LOG << "B[" << i << "] cannot\n";
+      }
+    }
+  }
+
+  show_vector(B);
+
+  return (B[0]);
+}
+
+
+
+int numDistinct(
+    const string &S, const string &T,
+    std::vector<std::vector<int>>& memory,
+    const int from, const int to) {
+  const int Sl = S.length();
+  const int Tl = T.length();
+  if (Tl <= to) {
+    return 1;
+  }
+
+  if (Sl <= from) {
+    return 0;
+  }
+
+  if (Sl < Tl) {
+    memory[from][to] = 0;
+  }
+
+  if (memory[from][to] >= 0) {
+    return memory[from][to];
+  }
+
+  int c = 0;
+
+  if (from == 4 && to == 4) {
+    LOG << "detect\n";
+  }
+
+  for (size_t i = from; i < Sl; i++) {
+    if (S[i] == T[to]) {
+      c += numDistinct(S, T, memory, i + 1, to + 1);
+    } else {
+      numDistinct(S, T, memory, i + 1, to);
+    }
+  }
+
+  memory[from][to] = c;
+  LOG << "from " << from << "," << to << " = " << c << std::endl;
+  return c;
+}
+
+/**
+* @param S: A string
+* @param T: A string
+* @return: Count the number of distinct subsequences
+*/
+int Solution::numDistinct(string &S, string &T) {
+  // write your code here
+  int size = S.length();
+  for (int i = size - 1; i >= 0; i--) {
+    if (std::string::npos == T.find(S[i])) {
+      S.erase(i, 1);
+    }
+  }
+  std::vector<std::vector<int>> memory(S.size(), std::vector<int>(T.size(), -1));
+  return lintcode::numDistinct(S, T, memory, 0, 0);
+}
+int Solution::minDistance(string &word1, string &word2) {
+  // write your code here
+  int n = word1.length();
+  int m = word2.length();
+
+  vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+
+  for(int i = 0; i <= n; i++){
+    dp[i][0] = i;
+  }
+
+  for(int j = 0; j <= m; j++){
+    dp[0][j] = j;
+  }
+
+  for(int i = 1; i <= n; i++){
+    for(int j = 1; j <= m; j++){
+      if(word1[i-1] == word2[j-1])
+        dp[i][j] = min(dp[i-1][j-1], 1 + min(dp[i-1][j], dp[i][j-1]));
+
+      else
+        dp[i][j] = 1 + min(dp[i-1][j-1], min(dp[i-1][j], dp[i][j-1]));
+    }
+  }
+
+  return dp[n][m];
 }
 }//namespace lintcode
