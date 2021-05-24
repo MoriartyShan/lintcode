@@ -13,7 +13,10 @@
 #include <vector>
 #include <algorithm>
 #include <queue>
+#include <deque>
 #include <unordered_set>
+#include <unordered_map>
+#include <stack>
 using namespace std;
 
 #define LOG cout << __FILE__ << ":" << __LINE__ << ":"
@@ -22,7 +25,17 @@ using namespace std;
  * Definition for singly-linked list with a random pointer.
  */
 namespace lintcode{
-void show_vector(const std::vector<int>& v);
+template<typename _T>
+void show_vector(const std::vector<_T>& v) {
+  LOG << "vector:";
+  for (auto m : v) {
+    std::cout << m << ",";
+  }
+  std::cout << std::endl;
+}
+
+template<>
+void show_vector<std::vector<std::string>>(const std::vector<std::vector<std::string>>& v);
 
 struct RandomListNode {
    int label;
@@ -321,6 +334,27 @@ public:
  */
   int minDistance(string &word1, string &word2);
 
+  /**
+ * @param height: A list of integer
+ * @return: The area of largest rectangle in the histogram
+ */
+  int largestRectangleArea(vector<int> &heights);
+
+  /*
+ * @param start: a string
+ * @param end: a string
+ * @param dict: a set of string
+ * @return: An integer
+ */
+  int ladderLength(string &start, string &end, unordered_set<string> &dict);
+
+  /*
+ * @param start: a string
+ * @param end: a string
+ * @param dict: a set of string
+ * @return: a list of lists of string
+ */
+  vector<vector<string>> findLadders(string &start, string &end, unordered_set<string> &dict);
 };
 
 }//namespace lintcode

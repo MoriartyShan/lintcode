@@ -16,13 +16,13 @@
 
 namespace lintcode {
 
-void show_vector(const std::vector<int>& v) {
-  LOG << "vector:";
+template<>
+void show_vector<std::vector<std::string>>(const std::vector<std::vector<std::string>>& v) {
   for (auto m : v) {
-    std::cout << m << ",";
+    show_vector(m);
   }
-  std::cout << std::endl;
 }
+
 
 bool Solution::isInterleave(const char *s[], int *l, int start) {
   if (l[0] == l[1] && l[0] == 0 && l[2] == 0) return true;
@@ -1360,6 +1360,7 @@ int Solution::numDistinct(string &S, string &T) {
   std::vector<std::vector<int>> memory(S.size(), std::vector<int>(T.size(), -1));
   return lintcode::numDistinct(S, T, memory, 0, 0);
 }
+
 int Solution::minDistance(string &word1, string &word2) {
   // write your code here
   int n = word1.length();
@@ -1387,4 +1388,181 @@ int Solution::minDistance(string &word1, string &word2) {
 
   return dp[n][m];
 }
+
+/**
+* @param height: A list of integer
+* @return: The area of largest rectangle in the histogram
+*/
+int Solution::largestRectangleArea(vector<int> &heights) {
+  // write your code here
+#if BAD_ALGORITHM
+  const int l = heights.size();
+
+    //std::vector<std::vector<int>> memory(heights.size(), std::vector<int>(heights.size(), -1));
+    int max = 0, cur;
+    for (int i = 0; i < l; i++) {
+      int min_height = heights[i];
+      cur = heights[i];
+      if (max < cur) {
+        max = cur;
+      }
+      for (int j = i + 1; j < l; j++) {
+        if (min_height > heights[j]) {
+          min_height = heights[j];
+        }
+        cur = (j - i + 1) * min_height;
+        if (max < cur) {
+          max = cur;
+        }
+      }
+    }
+    return max;
+
+#else
+  heights.push_back(-1);
+  stack<int> st;
+  int ret = 0, top;
+  for (int i = 0; i < heights.size(); i++)
+  {
+    if (st.empty() || heights[st.top()] <= heights[i])
+    {
+      st.push(i);
+      LOG << "push " << heights[i] << std::endl;
+    }
+    else
+    {
+      while (!st.empty() && heights[st.top()] > heights[i])
+      {
+        top = st.top();
+        st.pop();
+        //i-top指的是当前矩形的宽度，heights[top]就是当前的高度
+        //再次强调栈中现在为单调递增
+        int tmp = (i - top)*heights[top];
+
+        LOG << "tmp = (" << i << "-" << top << ") * " << heights[top] << "=" << tmp << std::endl;
+
+        if (tmp > ret)
+          ret = tmp;
+      }
+      st.push(top);
+      LOG << "push " << heights[top] << " to " << heights[i] << std::endl;
+      heights[top] = heights[i];
+      show_vector(heights);
+    }
+  }
+  return ret;
+#endif
+}
+
+int stringDistance(
+    const std::string &a,
+    const std::string &b) {
+  int d = 0;
+  const int l = a.length();
+  for (int i = 0; i < l; i++) {
+    if (a[i] == b[i]) {
+      d++;
+    }
+  }
+  return l - d;
+};
+
+/*
+* @param start: a string
+* @param end: a string
+* @param dict: a set of string
+* @return: An integer
+*/
+int Solution::ladderLength(string &start, string &end, unordered_set<string> &dict) {
+  // write your code here
+  std::queue<std::string> queue[2];
+  queue[0].push(start);
+  dict.emplace(end);
+  dict.erase(start);
+
+  int c = 0;
+  while ((!queue[c % 2].empty()) && (!dict.empty())) {
+    auto &from = queue[c % 2];
+    auto &to = queue[(c + 1) % 2];
+//      LOG << "push " << from.size() << std::endl;
+    while((!from.empty()) && (!dict.empty())) {
+      std::string _string = from.front();
+      from.pop();
+//        LOG << "search " << _string << std::endl;
+      for (auto iter = dict.begin(); iter != dict.end();) {
+        if (stringDistance(_string, *iter) == 1) {
+          to.push(*iter);
+//            LOG << "push " << *iter << std::endl;
+          if ((*iter) == end) {
+            return (c > 0) ? (c + 2) : 2;
+          }
+
+          iter = dict.erase(iter);
+        } else {
+          iter++;
+        }
+      }
+    }
+    c++;
+  }
+
+  return 0;
+};
+
+/*
+* @param start: a string
+* @param end: a string
+* @param dict: a set of string
+* @return: a list of lists of string
+*/
+vector<vector<string>> Solution::findLadders(string &start, string &end, unordered_set<string> &dict) {
+  // write your code here
+  std::queue<std::vector<std::string>> queue[2];
+  queue[0].push({start});
+  dict.emplace(end);
+  dict.erase(start);
+
+  int c = 0;
+  std::vector<std::vector<std::string>> result;
+  while ((!queue[c % 2].empty()) && (!dict.empty())) {
+    auto &from = queue[c % 2];
+    auto &to = queue[(c + 1) % 2];
+    std::unordered_set<std::string> this_level_remove;
+    LOG << "push " << from.size() << std::endl;
+    while((!from.empty()) && (!dict.empty())) {
+      auto _string = from.front().back();
+
+      LOG << "search " << _string << std::endl;
+      for (auto iter = dict.begin(); iter != dict.end(); iter++) {
+        if (stringDistance(_string, *iter) == 1) {
+          auto _strings = from.front();
+          _strings.emplace_back(*iter);
+
+          LOG << "push " << *iter << std::endl;
+          if ((*iter) == end) {
+            result.emplace_back(_strings);
+            break;
+          } else {
+            to.push(_strings);
+            this_level_remove.insert(*iter);
+          }
+
+        }
+
+      }
+      from.pop();
+    }
+    if (!result.empty()) {
+      break;
+    }
+
+    for (auto &s : this_level_remove) {
+      dict.erase(s);
+    }
+
+    c++;
+  }
+  return result;
+}
+
 }//namespace lintcode
