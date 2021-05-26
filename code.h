@@ -355,6 +355,20 @@ public:
  * @return: a list of lists of string
  */
   vector<vector<string>> findLadders(string &start, string &end, unordered_set<string> &dict);
+
+  /**
+ * @param board: A list of lists of character
+ * @param word: A string
+ * @return: A boolean
+ */
+  bool exist(vector<vector<char>> &board, string &word);
+
+  /**
+ * @param num: A list of integers
+ * @return: An integer
+ */
+  int longestConsecutive(vector<int> &num);
+
 };
 
 }//namespace lintcode

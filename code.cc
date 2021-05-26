@@ -1565,4 +1565,102 @@ vector<vector<string>> Solution::findLadders(string &start, string &end, unorder
   return result;
 }
 
+int Solution::longestConsecutive(vector<int> &num) {
+  // write your code here
+  if (num.size() < 2) {
+    return num.size();
+  }
+  std::set<int> nums(num.begin(), num.end());
+
+  int count = 1, max = 1;
+  auto iter = nums.begin(), iter_2 = iter;
+  iter_2++;
+
+  for (; iter_2 != nums.end(); iter_2++, iter++) {
+    if ((*iter + 1) == (*iter_2)) {
+      count++;
+    } else {
+      if (count > max) {
+        max = count;
+      }
+      count = 1;
+    }
+  }
+
+
+  if (count > max) {
+    max = count;
+  }
+  return max;
+}
+
+bool dfs(
+    vector<vector<char>> &board,
+    string &word,
+    const uint64_t row,
+    const uint64_t col,
+    const int pos,
+    std::set<uint64_t>& sets) {
+
+  uint64_t key = (row << 32) ^ col;
+  if (sets.count(key) > 0) {
+    return false;
+  }
+
+  const uint64_t rows = board.size();
+  const uint64_t cols = board.front().size();
+  const int next = (pos + 1);
+  if (word.length() == pos) {
+
+    LOG << "length " << sets.size() << "," << pos << std::endl;
+    for (auto &s : sets) {
+      std::cout << (s >> 32) << "," << (uint32_t)s << std::endl;
+    }
+
+    return true;
+  }
+  LOG << " test " << row << "," << col << std::endl;
+  if (board[row][col] == word[pos]) {
+    if (next == word.length()) {
+      return true;
+    }
+
+    sets.insert(key);
+    LOG << " insert " << row << "," << col << std::endl;
+    if (row > 0 && dfs(board, word, row - 1, col, next, sets)) {
+      return true;
+    }
+
+    if (col > 0 && dfs(board, word, row, col - 1, next, sets)) {
+      return true;
+    }
+
+    if (row + 1 < rows && dfs(board, word, row + 1, col, next, sets)) {
+      return true;
+    }
+
+    if (col + 1 < cols && dfs(board, word, row, col + 1, next, sets)) {
+      return true;
+    }
+
+    sets.erase(key);
+    LOG << " erase " << row << "," << col << std::endl;
+  }
+  return false;
+}
+
+bool Solution::exist(vector<vector<char>> &board, string &word) {
+  // write your code here
+  std::set<uint64_t> sets;
+  for (int r = 0; r < board.size(); r++) {
+    for (int c = 0; c < board[r].size(); c++) {
+      if (dfs(board, word, r, c, 0, sets)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 }//namespace lintcode
