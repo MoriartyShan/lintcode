@@ -23,8 +23,8 @@ int main() {
 //  LOG << n.substr(1) << std::endl;
 
   string S("z"), T("aloud");
-  std::vector<int> dict = {0,0,-1}; //{{'A','B','C','E'},{'S','F','C','S'},{'A','D','E','E'}};
-  auto res = test.longestConsecutive(dict);
+  std::vector<int> dict = {2,3,5,7}, V = {1,5,2,4}; //{{'A','B','C','E'},{'S','F','C','S'},{'A','D','E','E'}};
+  auto res = test.backPackII(10, dict, V);
   LOG << "res " << res << std::endl;
   return 0;
 }
