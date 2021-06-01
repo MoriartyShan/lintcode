@@ -1663,4 +1663,64 @@ bool Solution::exist(vector<vector<char>> &board, string &word) {
   return false;
 }
 
+
+void backPackII(
+  const int *A, const int *V, const size_t size, const int m,
+  int sum, int value, std::vector<int> &memory, int *cur_max_val) {
+  for (size_t i = 0; i < size; i++) {
+    int s = sum + A[i];
+    if (s <= m) {
+      int v = value + V[i];
+      LOG << A << " s[" << s << "] = " << v << std::endl;
+      if (memory[s] < v) {
+        memory[s] = v;
+        if (*cur_max_val < v) {
+          *cur_max_val = v;
+        }
+      }
+      backPackII(A + i + 1, V + i + 1, size - i - 1, m, s, v, memory, cur_max_val);
+    }
+  }
+}
+
+void backPackII(int m, vector<int> &A, vector<int> &V, std::vector<int>& memory) {
+
+}
+
+/**
+* @param m: An integer m denotes the size of a backpack
+* @param A: Given n items with size A[i]
+* @param V: Given n items with value V[i]
+* @return: The maximum value
+*/
+int Solution::backPackII(int m, vector<int> &A, vector<int> &V) {
+  // write your code here
+#if 0
+  std::vector<int> memory(m + 1, 0);
+  int max = 0;
+  backPackII(A.data(), V.data(), A.size(), m, 0, 0, memory, &max);
+  return max;
+#else
+  std::vector<int> memory(m + 1, 0);
+  int max = 0;
+  const int size = A.size();
+  for (int i = 0; i < size; i++) {
+    ///if you do this from A[i] to m, memory[A[i] + k]
+    /// may add memory[A[i] + k - p], which has been added this time
+    for (int j = m; j >= A[i]; j--) {
+      int tmp = memory[j - A[i]] + V[i];
+//      LOG << "j " << j << "," << A[i] << "," << V[i] << "," << memory[j - A[i]] << std::endl;
+      if (memory[j] < tmp) {
+        memory[j] = tmp;
+        if (max < tmp) {
+          max = tmp;
+        }
+      }
+    }
+  }
+
+  return max;
+#endif
+}
+
 }//namespace lintcode

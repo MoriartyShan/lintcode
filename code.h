@@ -372,22 +372,7 @@ public:
 
   void backPackII(
       const int *A, const int *V, const size_t size, const int m,
-      int sum, int value, std::vector<int> &memory, int *cur_max_val) {
-    for (size_t i = 0; i < size; i++) {
-      int s = sum + A[i];
-      if (s <= m) {
-        int v = value + V[i];
-        LOG << A << " s[" << s << "] = " << v << std::endl;
-        if (memory[s] < v) {
-          memory[s] = v;
-          if (*cur_max_val < v) {
-            *cur_max_val = v;
-          }
-        }
-        backPackII(A + i + 1, V + i + 1, size - i - 1, m, s, v, memory, cur_max_val);
-      }
-    }
-  }
+      int sum, int value, std::vector<int> &memory, int *cur_max_val);
 
   /**
  * @param m: An integer m denotes the size of a backpack
@@ -395,13 +380,7 @@ public:
  * @param V: Given n items with value V[i]
  * @return: The maximum value
  */
-  int backPackII(int m, vector<int> &A, vector<int> &V) {
-    // write your code here
-    std::vector<int> memory(m + 1, 0);
-    int max = 0;
-    backPackII(A.data(), V.data(), A.size(), m, 0, 0, memory, &max);
-    return max;
-  }
+  int backPackII(int m, vector<int> &A, vector<int> &V);
 
 };
 
