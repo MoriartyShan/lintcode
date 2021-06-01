@@ -1723,4 +1723,20 @@ int Solution::backPackII(int m, vector<int> &A, vector<int> &V) {
 #endif
 }
 
+int Solution::hashCode(string &key, int HASH_SIZE) {
+  // write your code here
+  ///[(a * h + moda) (b * h + modb) (c * h + modc) *...] % h = (moda * modb * modc *...) % h
+  const int l = key.length();
+  int res = 0;
+  int64_t pow_mod = 1;
+  int mod_base = 33 % HASH_SIZE;
+  for (int i = l - 1; i >= 0; i--){
+    int modb = key[i] % HASH_SIZE;
+    res = (res + ((modb * pow_mod) % HASH_SIZE)) % HASH_SIZE;
+    pow_mod = (pow_mod * mod_base) % HASH_SIZE;
+  }
+
+  return res;
+}
+
 }//namespace lintcode

@@ -382,6 +382,14 @@ public:
  */
   int backPackII(int m, vector<int> &A, vector<int> &V);
 
+  /**
+ * @param key: A string you should hash
+ * @param HASH_SIZE: An integer
+ * @return: An integer
+ */
+  int hashCode(string &key, int HASH_SIZE);
+
+
 };
 
 }//namespace lintcode
