@@ -389,7 +389,11 @@ public:
  */
   int hashCode(string &key, int HASH_SIZE);
 
-
+  /**
+ * @param hashTable: A list of The first node of linked list
+ * @return: A list of The first node of linked list which have twice size
+ */
+  vector<ListNode*> rehashing(vector<ListNode*> hashTable);
 };
 
 }//namespace lintcode

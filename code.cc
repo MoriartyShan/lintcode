@@ -1739,4 +1739,40 @@ int Solution::hashCode(string &key, int HASH_SIZE) {
   return res;
 }
 
+vector<ListNode*> Solution::rehashing(vector<ListNode*> hashTable) {
+  // write your code here
+  auto hashcode = [](int key, int capacity) {
+    int code = key % capacity;
+    if (code < 0) {
+      code += capacity;
+    }
+    return code;
+  };
+
+  const int cap = hashTable.size() * 2;
+  vector<std::vector<ListNode*>> Table(cap);
+  for (auto node : hashTable) {
+    while (node != nullptr) {
+      int code = hashcode(node->val, cap);
+      Table[code].emplace_back(node);
+      node = node->next;
+    }
+  }
+  std::vector<ListNode*> newTable;
+  newTable.reserve(cap);
+  for (auto &bucket : Table) {
+    ListNode *head = nullptr;
+    if (!bucket.empty()) {
+      head = bucket[0];
+      for (int i = 1; i < bucket.size(); i++) {
+        bucket[i - 1]->next = bucket[i];
+      }
+      bucket.back()->next = nullptr;
+    }
+    newTable.emplace_back(head);
+  }
+
+  return newTable;
+}
+
 }//namespace lintcode
