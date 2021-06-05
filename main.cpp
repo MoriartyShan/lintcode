@@ -23,8 +23,10 @@ int main() {
 //  LOG << n.substr(1) << std::endl;
 
   string S("z"), T("Wrong answer or accepted?");
-  std::vector<int> dict = {2,3,5,7}, V = {1,5,2,4}; //{{'A','B','C','E'},{'S','F','C','S'},{'A','D','E','E'}};
-  auto res = test.hashCode(T, 1000000007);
-  LOG << "res " << res << std::endl;
+  std::vector<int> dict = {1, 10, 2, 3, 4};
+  ;
+  test.heapify(dict);
+  lintcode::show_vector(dict);
+
   return 0;
 }

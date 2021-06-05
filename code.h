@@ -17,6 +17,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <stack>
+#include <map>
 using namespace std;
 
 #define LOG cout << __FILE__ << ":" << __LINE__ << ":"
@@ -32,6 +33,14 @@ void show_vector(const std::vector<_T>& v) {
     std::cout << m << ",";
   }
   std::cout << std::endl;
+}
+template<typename _T>
+void show_set(const std::set<_T>& v) {
+  std::string contains = "set:";
+  for (auto m : v) {
+    contains += (std::to_string(m) + ",");
+  }
+  std::cout << contains << std::endl;
 }
 
 template<>
@@ -394,6 +403,26 @@ public:
  * @return: A list of The first node of linked list which have twice size
  */
   vector<ListNode*> rehashing(vector<ListNode*> hashTable);
+
+
+  /**
+ * @param A: Given an integer array with no duplicates.
+ * @return: The root of max tree.
+ */
+  TreeNode * maxTree(vector<int> &A);
+
+
+  /**
+ * @param buildings: A list of lists of integers
+ * @return: Find the outline of those buildings
+ */
+  vector<vector<int>> buildingOutline(vector<vector<int>> &buildings);
+
+  /*
+ * @param A: Given an integer array
+ * @return: nothing
+ */
+  void heapify(vector<int> &A);
 };
 
 }//namespace lintcode

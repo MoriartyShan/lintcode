@@ -1774,5 +1774,169 @@ vector<ListNode*> Solution::rehashing(vector<ListNode*> hashTable) {
 
   return newTable;
 }
+TreeNode *Solution::maxTree(vector<int> &A) {
+  // write your code here
+  std::stack<TreeNode *> tree;
+//    for element in A:
+//    node = TreeNode(element)
+//    while len(stack) != 0 and element > stack[-1].val:
+//    node.left = stack.pop()
+//    if len(stack) != 0:
+//    stack[-1].right = node
+//    stack.append(node)
+  for (int i = 0; i < A.size(); i++) {
+    auto node = new TreeNode(A[i]);
+    while(!tree.empty() && tree.top()->val < node->val) {
+      node->left = tree.top();
+      tree.pop();
+    }
+    if (!tree.empty()) {
+      tree.top()->right = node;
+    }
+    tree.push(node);
+  }
 
+  return tree.top();
+
+}
+
+
+/**
+* @param buildings: A list of lists of integers
+* @return: Find the outline of those buildings
+*/
+vector<vector<int>> Solution::buildingOutline(vector<vector<int>> &buildings) {
+  // write your code here
+#if 0
+  ///too slow
+    if (buildings.empty()) {
+      return vector<vector<int>>();
+    }
+    std::map<int, int> height;
+
+    for (auto &b : buildings) {
+      for (int i = b[0]; i < b[1]; i++) {
+        if (height.count(i) == 0) {
+          height.emplace(i, b[2]);
+        } else if (height.at(i) < b[2]) {
+          height.at(i) = b[2];
+        }
+      }
+    }
+
+    vector<vector<int>> Outline;
+    vector<int> build;
+
+    for (auto &m : height) {
+      LOG << m.first << "," << m.second << "\n";
+      if (build.empty()) {
+        build = {m.first, m.first + 1, m.second};
+      } else if (build[1] != m.first || build[2] != m.second) {
+        Outline.emplace_back(build);
+        build = {m.first, m.first + 1, m.second};
+      } else {
+        build[1] = m.first + 1;
+      }
+    }
+    Outline.emplace_back(build);
+    return Outline;
+#elif 0
+  ///still slow
+    if (buildings.empty()) {
+      return vector<vector<int>>();
+    }
+    struct Comare{
+      bool operator()(const vector<int> *_left, const vector<int> *_right) {
+        const vector<int>&left = *_left, &right = *_right;
+        if (left[0] < right[0]) {
+          return true;
+        } else if (left[0] > right[0]) {
+          return false;
+        }
+        if (left[1] < right[1]) {
+          return true;
+        } else if (left[1] > right[1]) {
+          return false;
+        }
+        if (left[2] < right[2]) {
+          return true;
+        }
+        return false;
+
+      }
+    };
+
+    Comare cmp;
+    vector<vector<int>> outlines;
+    std::set<vector<int> *, Comare> set_buildings;
+    std::set<int> lines;
+    for (auto &b : buildings) {
+      set_buildings.emplace(&b);
+      lines.emplace(b[0]);
+      lines.emplace(b[1]);
+    }
+    show_set(lines);
+
+    auto _left = lines.begin(), _right = _left;
+    _right++;
+    for (; _right != lines.end(); _left++, _right++) {
+      int left = *_left, right = *_right;
+      auto iter = set_buildings.begin();
+      vector<int> outline = {left, right, 0};
+//      LOG << "outline size = " << outline.size() << std::endl;
+//      LOG << "merging:";
+//      show_vector(**iter);
+//      show_vector(outline);
+      while (iter != set_buildings.end() && (**iter)[0] >= left && (**iter)[0] < right) {
+        auto &building = **iter;
+        if (outline[2] < building[2]) {
+          outline[2] = building[2];
+        }
+//        LOG << "merging:";
+        show_vector(building);
+
+        iter = set_buildings.erase(iter);
+
+        if (right < building[1] && right > building[0]) {
+          building[0] = right;
+          auto iter_cur = set_buildings.emplace(&building).first;
+          if (iter == set_buildings.end() || cmp(&building, *iter) == true) {
+            iter = iter_cur;
+          }
+        }
+      }
+      if (outline[2] > 0) {
+//        show_vector(outline);
+//        LOG << "outline size = " << outline.size() << std::endl;
+        if ((outlines.size() > 0) && (outlines.back()[2] == outline[2]) && (outlines.back()[1] == outline[0])) {
+          outlines.back()[1] = outline[1];
+        } else {
+          outlines.emplace_back(outline);
+        }
+      }
+
+
+    }
+    return outlines;
+
+#endif
+}
+
+/*
+* @param A: Given an integer array
+* @return: nothing
+*/
+void Solution::heapify(vector<int> &A) {
+  // write your code here
+  const int size = A.size();
+  for (int i = 0; i < size; i++) {
+    int child = i;
+    int father = ((child + 1) >> 1) - 1;
+    while (father >= 0 && (A[father] > A[child])) {
+      std::swap(A[father], A[child]);
+      child = father;
+      father = ((child + 1) >> 1) - 1;
+    }
+  }
+};
 }//namespace lintcode
