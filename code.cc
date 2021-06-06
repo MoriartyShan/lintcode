@@ -2315,4 +2315,21 @@ UndirectedGraphNode* Solution::cloneGraph(UndirectedGraphNode* node) {
   return o_to_new.find(node)->second;
 }
 
+vector<int> Solution::subarraySum(vector<int> &nums) {
+  // write your code here
+  std::vector<int> preSum(nums.size() + 1, 0);
+  preSum[0] = 0;
+  for (int i = 1; i <= nums.size(); i++) {
+    preSum[i] = preSum[i - 1] + nums[i - 1];
+  }
+
+  for (int i = 0; i <= nums.size(); i++) {
+    for (int j = i + 1; j <= nums.size(); j++) {
+      if (preSum[j] - preSum[i] == 0) {
+        return vector<int>({i, j - 1});
+      }
+    }
+  }
+  return {};
+}
 }//namespace lintcode

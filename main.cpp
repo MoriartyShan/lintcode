@@ -20,14 +20,14 @@ int main() {
 //  h.next = &f;
   //a.show(10);
   //lintcode::ListNode *head = test.deleteDuplicates2(&a);
-  std::vector<int> v = {2};
+  std::vector<int> v = {0};
 
 //  string n = "m";
 //  LOG << n << std::endl;
 //  LOG << n.substr(1) << std::endl;
 
   std::string dict = "aab";
-  auto res = test.partition(dict);
+  auto res = test.subarraySum(v);
   lintcode::show_vector(res);
 
 
