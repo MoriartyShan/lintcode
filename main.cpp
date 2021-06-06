@@ -26,8 +26,8 @@ int main() {
 //  LOG << n << std::endl;
 //  LOG << n.substr(1) << std::endl;
 
-  std::vector<int> dict{2,2,3};
-  auto res = test.combinationSum(dict, 5);
+  std::string dict = "aab";
+  auto res = test.partition(dict);
   lintcode::show_vector(res);
 
 

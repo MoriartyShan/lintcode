@@ -960,7 +960,7 @@ int Solution::minCut(string &s) {
   // write your code here
   const size_t length = s.length();
   std::vector<std::vector<int8_t>> memory(length,
-                                          std::vector<int8_t>(length, 0));
+      std::vector<int8_t>(length, 0));
   std::vector<int> min_cuts(length, -1);
   return lintcode::minCut(s, memory, min_cuts, 0);
 }
@@ -2227,6 +2227,92 @@ vector<string> Solution::wordSearchII(vector<vector<char>> &board, vector<string
     }
   }
   return ret;
+}
+
+bool partition(
+    const string &s,
+    std::vector<std::vector<std::vector<std::string>>> &memory,
+    std::vector<int> &flags, const int from) {
+  if (s.length() == from || (flags[from] > 0)) {
+    return true;
+  }
+  if (flags[from] < 0) {
+    return false;
+  }
+
+  auto isPalindrome = [&](const int to) {
+    for (int i = from, j = to; i < j; i++, j--) {
+      if (s[i] != s[j]) {
+        return false;
+      }
+    }
+    return true;
+  };
+//    LOG << "from " <<  s.length() << "," << from << std::endl;
+
+  const int length = s.length() - from;
+  for (int i = length - 1; i >= 0; i--) {
+//      LOG << "i = " << i << std::endl;
+    if (isPalindrome(from + i)) {
+      std::string sub = s.substr(from, i + 1);
+//        LOG << "good " << sub << std::endl;
+      if (partition(s, memory, flags, from + i + 1)) {
+        auto m = memory[from + i + 1];
+        for (auto &sm : m) {
+          sm.insert(sm.begin(), sub);
+        }
+        memory[from].insert(memory[from].end(), m.begin(), m.end());
+      }
+    }
+  }
+
+  if (memory[from].empty()) {
+    flags[from] = -1;
+    return false;
+  }
+
+  flags[from] = 1;
+  return true;
+}
+
+vector<vector<string>> Solution::partition(string &s) {
+  // write your code here
+  std::vector<std::vector<std::vector<std::string>>> memory(s.length() + 1);
+  std::vector<int> flags(s.length() + 1, 0);
+  flags.back() = 1;
+  memory.back() = std::vector<std::vector<std::string>>(1, std::vector<std::string>());
+
+  lintcode::partition(s, memory, flags, 0);
+  return memory[0];
+}
+
+
+void cloneGraph(
+    UndirectedGraphNode* node,
+    std::map<UndirectedGraphNode *, UndirectedGraphNode *>& o_to_new) {
+  if (node == nullptr) return;
+  o_to_new.emplace(node, new UndirectedGraphNode(node->label));
+  for (auto neighbor : node->neighbors) {
+    if (o_to_new.count(neighbor) == 0) {
+      cloneGraph(neighbor, o_to_new);
+    }
+  }
+  return;
+}
+
+UndirectedGraphNode* Solution::cloneGraph(UndirectedGraphNode* node) {
+  // write your code here
+  if (node == nullptr) return nullptr;
+  std::map<UndirectedGraphNode *, UndirectedGraphNode *> o_to_new;
+
+  lintcode::cloneGraph(node, o_to_new);
+  for (auto on : o_to_new) {
+    auto &neighbor = on.second->neighbors;
+    for (auto n : on.first->neighbors) {
+      neighbor.emplace_back(o_to_new.find(n)->second);
+    }
+  }
+  return o_to_new.find(node)->second;
 }
 
 }//namespace lintcode

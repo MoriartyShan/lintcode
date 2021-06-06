@@ -48,6 +48,12 @@ void show_vector<std::vector<std::string>>(const std::vector<std::vector<std::st
 template<>
 void show_vector<std::vector<int>>(const std::vector<std::vector<int>>& v);
 
+struct UndirectedGraphNode {
+  int label;
+  vector<UndirectedGraphNode *> neighbors;
+  UndirectedGraphNode(int x) : label(x) {};
+};
+
 struct RandomListNode {
    int label;
    RandomListNode *next, *random;
@@ -446,6 +452,19 @@ public:
  * @return: A list of lists of integers
  */
   vector<vector<int>> combinationSum(vector<int> &candidates, int target);
+
+  /*
+ * @param s: A string
+ * @return: A list of lists of string
+ */
+  vector<vector<string>> partition(string &s);
+
+
+  /**
+ * @param node: A undirected graph node
+ * @return: A undirected graph node
+ */
+  UndirectedGraphNode* cloneGraph(UndirectedGraphNode* node);
 
 };
 
