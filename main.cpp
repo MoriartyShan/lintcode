@@ -26,10 +26,8 @@ int main() {
 //  LOG << n << std::endl;
 //  LOG << n.substr(1) << std::endl;
 
-
-  std::vector<std::string> words = {"dog","google","facebook","internationalization","blabla"};
-  std::vector<std::vector<char>> dict{{'d','o','a','f'},{'a','g','a','i'},{'d','c','a','n'}};
-  auto res = test.longestWords(words);
+  std::vector<int> dict{2,2,3};
+  auto res = test.combinationSum(dict, 5);
   lintcode::show_vector(res);
 
 

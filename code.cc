@@ -24,6 +24,12 @@ void show_vector<std::vector<std::string>>(const std::vector<std::vector<std::st
   }
 }
 
+template<>
+void show_vector<std::vector<int>>(const std::vector<std::vector<int>>& v) {
+  for (auto &sub : v) {
+    show_vector(sub);
+  }
+}
 
 bool Solution::isInterleave(const char *s[], int *l, int start) {
   if (l[0] == l[1] && l[0] == 0 && l[2] == 0) return true;
@@ -2090,5 +2096,137 @@ public:
     }
   }
 };
+
+int combinationSum(
+    set<int> &candidates, int target,
+    std::vector<std::vector<std::vector<int>>>& memory,
+    std::vector<int> &result) {
+  if (target == 0) {
+    LOG << "target 0\n";
+    return 1;
+  }
+  LOG << "target " << target << std::endl;
+  if (result[target] > 0) {
+    LOG << "return target 1 " << target << std::endl;
+    return 1;
+  } else if (result[target] < 0) {
+    LOG << "return target -1 " << target << std::endl;
+    return -1;
+  }
+
+  for (auto &i : candidates) {
+    LOG << "target " << target << "," << i << std::endl;
+    if (i <= target) {
+      if (1 == combinationSum(
+          candidates, target - i, memory, result)) {
+        auto t = memory[target - i];
+
+        for (auto iter = t.begin(); iter != t.end();){
+          if (iter->empty() || iter->back() <= i) {
+            iter->emplace_back(i);
+            iter++;
+          } else {
+            iter = t.erase(iter);
+          }
+        }
+//          LOG << "insert target " << target << std::endl;
+        memory[target].insert(memory[target].end(), t.begin(), t.end());
+//          show_vector(memory[target]);
+      }
+    }
+  }
+  if (memory[target].empty()) {
+    result[target] = 0;
+//      LOG << "finish target " << target << " is empty\n";
+    return 0;
+  } else {
+    result[target] = 1;
+//      LOG << "finish target " << target << "\n";
+//      show_vector(memory[target]);
+    return 1;
+  }
+}
+
+vector<vector<int>> Solution::combinationSum(vector<int> &candidates, int target) {
+  // write your code here
+  std::vector<std::vector<std::vector<int>>> memory(target + 1);
+  std::vector<int> result(target + 1, 0);
+  result[0] = 1;
+  memory[0] = std::vector<std::vector<int>>(1, std::vector<int>());
+  set<int> _candidates(candidates.begin(), candidates.end());
+
+  lintcode::combinationSum(_candidates, target, memory, result);
+  return memory.back();
+}
+
+vector<string> Solution::longestWords(vector<string> &dictionary) {
+  // write your code here
+  vector<string> ret;
+  int cur = 0;
+  for (auto &word : dictionary) {
+    int length = word.length();
+    if (length == cur) {
+
+      ret.emplace_back(word);
+    } else if (length > cur) {
+      ret.resize(1);
+      ret[0] = word;
+      cur = length;
+    }
+  }
+  return ret;
+}
+
+
+bool search_word(vector<vector<char>> &board, string &word,
+                 std::set<uint64_t>& memory, int row, int col, uint32_t index) {
+
+  if (index == word.length()) {
+    return true;
+  }
+  if (row < 0 || row >= board.size() || col < 0 || col >= board.front().size()) {
+    return false;
+  }
+  if (word[index] == board[row][col]) {
+    int next[4][2] = {{0, 1},{0, -1}, {1, 0}, {-1, 0}};
+    uint64_t key = (uint64_t)row ^ ((uint64_t)col) << 32;
+    if (memory.count(key) > 0) {
+      return false;
+    }
+    LOG << "in = " << row << "," << col << "," << key << std::endl;
+    memory.insert(key);
+
+    for (int i = 0; i < 4; i++) {
+      if (search_word(board, word, memory, row + next[i][0], col + next[i][1], index + 1)) {
+        return true;
+      }
+    }
+    LOG << "out = " << row << "," << col << "," << key << std::endl;
+    memory.erase(key);
+  }
+
+  return false;
+}
+
+vector<string> Solution::wordSearchII(vector<vector<char>> &board, vector<string> &words) {
+  // write your code here
+  vector<string> ret;
+  std::set<uint64_t> memory;
+  for (auto &word : words) {
+    memory.clear();
+    LOG << "start " << word << "," << std::endl;
+    show_set(memory);
+    for (int i = 0; i < board.size(); i++) {
+      for (int j = 0; j < board.front().size();j++) {
+        if (search_word(board, word, memory, i, j, 0)) {
+          ret.emplace_back(word);
+          i = board.size();
+          break;
+        }
+      }
+    }
+  }
+  return ret;
+}
 
 }//namespace lintcode

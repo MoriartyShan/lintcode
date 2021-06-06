@@ -45,6 +45,8 @@ void show_set(const std::set<_T>& v) {
 
 template<>
 void show_vector<std::vector<std::string>>(const std::vector<std::vector<std::string>>& v);
+template<>
+void show_vector<std::vector<int>>(const std::vector<std::vector<int>>& v);
 
 struct RandomListNode {
    int label;
@@ -424,85 +426,27 @@ public:
  */
   void heapify(vector<int> &A);
 
-  bool search_word(vector<vector<char>> &board, string &word,
-      std::set<uint64_t>& memory, int row, int col, uint32_t index) {
-
-    if (index == word.length()) {
-      return true;
-    }
-    if (row < 0 || row >= board.size() || col < 0 || col >= board.front().size()) {
-      return false;
-    }
-    if (word[index] == board[row][col]) {
-      int next[4][2] = {{0, 1},{0, -1}, {1, 0}, {-1, 0}};
-      uint64_t key = (uint64_t)row ^ ((uint64_t)col) << 32;
-      if (memory.count(key) > 0) {
-        return false;
-      }
-      LOG << "in = " << row << "," << col << "," << key << std::endl;
-      memory.insert(key);
-
-      for (int i = 0; i < 4; i++) {
-        if (search_word(board, word, memory, row + next[i][0], col + next[i][1], index + 1)) {
-          return true;
-        }
-      }
-      LOG << "out = " << row << "," << col << "," << key << std::endl;
-      memory.erase(key);
-    }
-
-    return false;
-  }
-
   /**
  * @param board: A list of lists of character
  * @param words: A list of string
  * @return: A list of string
  */
-  vector<string> wordSearchII(vector<vector<char>> &board, vector<string> &words) {
-    // write your code here
-    vector<string> ret;
-    std::set<uint64_t> memory;
-    for (auto &word : words) {
-      memory.clear();
-      LOG << "start " << word << "," << std::endl;
-      show_set(memory);
-      for (int i = 0; i < board.size(); i++) {
-        for (int j = 0; j < board.front().size();j++) {
-          if (search_word(board, word, memory, i, j, 0)) {
-            ret.emplace_back(word);
-            i = board.size();
-            break;
-          }
-        }
-      }
-    }
-    return ret;
-  }
+  vector<string> wordSearchII(vector<vector<char>> &board, vector<string> &words);
 
   /*
  * @param dictionary: an array of strings
  * @return: an arraylist of strings
  */
-  vector<string> longestWords(vector<string> &dictionary) {
-    // write your code here
-    vector<string> ret;
-    int cur = 0;
-    for (auto &word : dictionary) {
-      int length = word.length();
-      if (length == cur) {
-
-        ret.emplace_back(word);
-      } else if (length > cur) {
-        ret.resize(1);
-        ret[0] = word;
-        cur = length;
-      }
-    }
-    return ret;
+  vector<string> longestWords(vector<string> &dictionary);
 
 
-  }
+  /**
+ * @param candidates: A list of integers
+ * @param target: An integer
+ * @return: A list of lists of integers
+ */
+  vector<vector<int>> combinationSum(vector<int> &candidates, int target);
+
 };
 
 }//namespace lintcode
