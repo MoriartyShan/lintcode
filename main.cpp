@@ -1,4 +1,8 @@
 #include "code.h"
+#include <map>
+#include <list>
+
+
 
 int main() {
   lintcode::Solution test;
@@ -22,11 +26,12 @@ int main() {
 //  LOG << n << std::endl;
 //  LOG << n.substr(1) << std::endl;
 
-  string S("z"), T("Wrong answer or accepted?");
-  std::vector<int> dict = {1, 10, 2, 3, 4};
-  ;
-  test.heapify(dict);
-  lintcode::show_vector(dict);
+
+  std::vector<std::string> words = {"dog","google","facebook","internationalization","blabla"};
+  std::vector<std::vector<char>> dict{{'d','o','a','f'},{'a','g','a','i'},{'d','c','a','n'}};
+  auto res = test.longestWords(words);
+  lintcode::show_vector(res);
+
 
   return 0;
 }

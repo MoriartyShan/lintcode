@@ -1,4 +1,5 @@
 #include "code.h"
+#include <list>
 
 
 
@@ -1879,14 +1880,27 @@ vector<vector<int>> Solution::buildingOutline(vector<vector<int>> &buildings) {
 
     auto _left = lines.begin(), _right = _left;
     _right++;
+    std::stack<vector<int> *> stack;
     for (; _right != lines.end(); _left++, _right++) {
       int left = *_left, right = *_right;
-      auto iter = set_buildings.begin();
       vector<int> outline = {left, right, 0};
-//      LOG << "outline size = " << outline.size() << std::endl;
-//      LOG << "merging:";
-//      show_vector(**iter);
-//      show_vector(outline);
+
+      std::stack<vector<int> *> stack_;
+      while(!stack.empty()) {
+        auto &building = *stack.top();
+        stack.pop();
+        if (outline[2] < building[2]) {
+          outline[2] = building[2];
+        }
+
+        if (right < building[1] && right > building[0]) {
+          building[0] = right;
+          stack_.push(&building);
+        }
+      }
+      stack_.swap(stack);
+
+      auto iter = set_buildings.begin();
       while (iter != set_buildings.end() && (**iter)[0] >= left && (**iter)[0] < right) {
         auto &building = **iter;
         if (outline[2] < building[2]) {
@@ -1899,10 +1913,7 @@ vector<vector<int>> Solution::buildingOutline(vector<vector<int>> &buildings) {
 
         if (right < building[1] && right > building[0]) {
           building[0] = right;
-          auto iter_cur = set_buildings.emplace(&building).first;
-          if (iter == set_buildings.end() || cmp(&building, *iter) == true) {
-            iter = iter_cur;
-          }
+          stack.push(&building);
         }
       }
       if (outline[2] > 0) {
@@ -1918,7 +1929,88 @@ vector<vector<int>> Solution::buildingOutline(vector<vector<int>> &buildings) {
 
     }
     return outlines;
+#else
 
+  vector<vector<int>> ret;
+
+		if (buildings.empty())
+		{
+			return ret;
+		}
+
+		auto func = [](vector<int> &left, vector<int> &right) {
+			if (left[0] == right[0] && left[2] == right[2])
+			{
+				return left[1] < right[1];
+			}
+
+			if (left[0] == right[0])
+			{
+				return left[2] < right[2];
+			}
+
+			return left[0] > right[0];
+		};
+		// 建堆;
+		make_heap(buildings.begin(), buildings.end(), func);
+
+		pop_heap(buildings.begin(), buildings.end(), func);
+		vector<int> cur_outline = *buildings.rbegin();
+		buildings.pop_back();
+
+		while (buildings.empty() == false)
+		{
+			pop_heap(buildings.begin(), buildings.end(), func);
+			vector<int> building = *buildings.rbegin();
+			buildings.pop_back();
+
+			if (building[0] > cur_outline[1])
+			{
+				// 建筑与当前轮廓分离;
+				ret.push_back(cur_outline);
+				cur_outline = building;
+			}
+			else if (building[2] > cur_outline[2])
+			{
+				// 建筑与当前轮廓未分离，并且高度比当前高;
+				if (building[1] < cur_outline[1])
+				{
+					// 该建筑没有当前轮廓宽，生成新的建筑;
+					vector<int> new_building = { building[1], cur_outline[1], cur_outline[2] };
+					buildings.push_back(new_building);
+					push_heap(buildings.begin(), buildings.end(), func);
+				}
+
+				cur_outline[1] = building[0];
+				ret.push_back(cur_outline);
+				cur_outline = building;
+			}
+			else if (building[2] == cur_outline[2])
+			{
+				// 建筑与当前轮廓未分离，并且高度相等，则看是否合并轮廓;
+				cur_outline[1] = max(cur_outline[1], building[1]);
+			}
+			else if (building[2] < cur_outline[2])
+			{
+				// 建筑与当前轮廓未分离，并且高度比当前小;
+				if (building[0] == cur_outline[1])
+				{
+					// 正好在边缘;
+					ret.push_back(cur_outline);
+					cur_outline = building;
+				}
+				else if (building[1] > cur_outline[1])
+				{
+					// 有重叠，并且该建筑比当前轮廓宽，生成新的建筑;
+					vector<int> new_building = { cur_outline[1], building[1], building[2] };
+					buildings.push_back(new_building);
+					push_heap(buildings.begin(), buildings.end(), func);
+				}
+			}
+		}
+
+		ret.push_back(cur_outline);
+		return ret;
 #endif
 }
 
@@ -1939,4 +2031,64 @@ void Solution::heapify(vector<int> &A) {
     }
   }
 };
+
+class LRUCache {
+public:
+  std::list<std::pair<int, int>> _cache; //key, value
+  std::map<int, std::list<std::pair<int, int>>::iterator> _map;//or unordered_map
+  int _capacity;
+  /*
+  * @param capacity: An integer
+  */
+  LRUCache(int capacity) {
+    // do intialization if necessary
+    _capacity = capacity;
+  }
+
+  /*
+   * @param key: An integer
+   * @return: An integer
+   */
+  int get(int key) {
+    // write your code here
+    auto iter = _map.find(key);
+    if (iter == _map.end()) {
+      return -1;
+    }
+    std::pair<int, int> ret = *iter->second;
+    auto begin = _cache.begin();
+    if (iter->second != begin) {
+      _cache.erase(iter->second);
+//      LOG << "erase " << iter->first << "," << *iter->second << std::endl;
+      _cache.emplace_front(ret);
+      iter->second = _cache.begin();
+    }
+
+    return ret.second;
+  }
+
+  /*
+   * @param key: An integer
+   * @param value: An integer
+   * @return: nothing
+   */
+  void set(int key, int value) {
+    // write your code here
+    auto iter = _map.find(key);
+    if (iter != _map.end()) {
+      _cache.erase(iter->second);
+//      LOG << "erase " << iter->first << "," << *iter->second << std::endl;
+      _map.erase(iter);
+    }
+
+    _cache.emplace_front(std::pair<int, int>(key, value));
+    _map.emplace(key, _cache.begin());
+    if (_cache.size() > _capacity) {
+      _map.erase(_cache.back().first);
+//      LOG << "erase " << iter->first << "," << *iter->second << std::endl;
+      _cache.resize(_capacity);
+    }
+  }
+};
+
 }//namespace lintcode
