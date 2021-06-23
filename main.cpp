@@ -29,8 +29,6 @@ int main() {
   std::string dict = "aab";
   int sq = test.sqrt(65536);
   LOG << "sq = " << sq << std::endl;
-
-
-
+  LOG << "sqrt " << std::sqrt(2147483648.0);
   return 0;
 }

@@ -479,6 +479,12 @@ public:
  */
   int sqrt(int x);
 
+  /**
+ * @param n: An integer
+ * @return: True or false
+ */
+  bool checkPowerOf2(int n);
+
 };
 
 }//namespace lintcode

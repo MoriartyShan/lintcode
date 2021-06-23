@@ -2356,4 +2356,27 @@ int Solution::sqrt(int x) {
 
   return start;
 }
+
+bool Solution::checkPowerOf2(int n) {
+  // write your code here
+  bool has_1 = false;
+  for (int i = 0; i < 32; i++) {
+    if ((n & 0x1 == 1) ) {
+      if (has_1) {
+        return false;
+      } else {
+        has_1 = true;
+      }
+    }
+    n >>= 1;
+  }
+  return true;
+#if 0
+  //better, 100000 - 1 = 11111
+    if(n <= 0) {
+      return false;
+    }
+    return n & (n-1) ? false : true;
+#endif
+}
 }//namespace lintcode
