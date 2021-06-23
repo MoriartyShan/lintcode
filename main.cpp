@@ -27,8 +27,9 @@ int main() {
 //  LOG << n.substr(1) << std::endl;
 
   std::string dict = "aab";
-  auto res = test.subarraySum(v);
-  lintcode::show_vector(res);
+  int sq = test.sqrt(65536);
+  LOG << "sq = " << sq << std::endl;
+
 
 
   return 0;

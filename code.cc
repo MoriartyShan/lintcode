@@ -2332,4 +2332,28 @@ vector<int> Solution::subarraySum(vector<int> &nums) {
   }
   return {};
 }
+
+int Solution::sqrt(int x) {
+  // write your code here
+  int start = 0, end = 46340;//end * end == __INT_MAX__
+  if (start * start == x) {
+    return start;
+  } else if (end * end <= x) {
+    return end;
+  }
+  int mid;
+  while ((start + 1) < end) {
+    mid = (start + end) >> 1;
+    int pow = mid * mid;
+    if (pow == x) {
+      return mid;
+    } else if (pow > x) {
+      end = mid;
+    } else {
+      start = mid;
+    }
+  }
+
+  return start;
+}
 }//namespace lintcode

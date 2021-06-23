@@ -18,6 +18,7 @@
 #include <unordered_map>
 #include <stack>
 #include <map>
+#include <cmath>
 using namespace std;
 
 #define LOG cout << __FILE__ << ":" << __LINE__ << ":"
@@ -471,6 +472,12 @@ public:
  * @return: A list of integers includes the index of the first number and the index of the last number
  */
   vector<int> subarraySum(vector<int> &nums);
+
+  /**
+ * @param x: An integer
+ * @return: The sqrt of x
+ */
+  int sqrt(int x);
 
 };
 
