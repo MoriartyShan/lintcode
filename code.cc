@@ -2379,4 +2379,65 @@ bool Solution::checkPowerOf2(int n) {
     return n & (n-1) ? false : true;
 #endif
 }
+
+int Solution::fastPower(int a, int b, int n) {
+  // write your code here
+#if 0
+  int base = a > b ? (a % b) : a;
+    int mod = 1;
+    for (int i = 0; i < n; i++) {
+      double tmp = (double)mod / b;
+      tmp *= base;
+      tmp -= int(tmp);
+      mod = std::round(tmp * b);
+    }
+    return mod % b;
+#else
+  if (n == 0){
+    return 1 % b;
+  }
+  if (n == 1){
+    return a % b;
+  }
+  if (n % 2 == 0){
+    n = n / 2;
+    long long i = fastPower(a, b, n);
+    long long j = i * i % b;
+    return j;
+  }else{
+    n = (n - 1) / 2;
+    long long i = fastPower(a, b, n);
+    long long j = i * i % b * a %b ;
+    return j;
+  }
+
+#endif
+}
+
+
+void sortColors2(vector<int> &colors, int id_from, int color, int k) {
+  if (color == k) {
+    return;
+  }
+  int cur = id_from;
+  const int size = colors.size();
+  for (int i = id_from; i < size; i++) {
+    if (colors[i] == color) {
+      std::swap(colors[i], colors[cur]);
+      cur++;
+    }
+  }
+  sortColors2(colors, cur, 1 + color, k);
+}
+
+/**
+* @param colors: A list of integer
+* @param k: An integer
+* @return: nothing
+*/
+void Solution::sortColors2(vector<int> &colors, int k) {
+  // write your code here
+  lintcode::sortColors2(colors, 0, 1, k);
+}
+
 }//namespace lintcode

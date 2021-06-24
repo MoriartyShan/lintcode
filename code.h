@@ -485,6 +485,21 @@ public:
  */
   bool checkPowerOf2(int n);
 
+  /**
+ * @param a: A 32bit integer
+ * @param b: A 32bit integer
+ * @param n: A 32bit integer
+ * @return: An integer
+ */
+  int fastPower(int a, int b, int n);
+
+  /**
+ * @param colors: A list of integer
+ * @param k: An integer
+ * @return: nothing
+ */
+  void sortColors2(vector<int> &colors, int k);
+
 };
 
 }//namespace lintcode

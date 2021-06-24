@@ -27,8 +27,9 @@ int main() {
 //  LOG << n.substr(1) << std::endl;
 
   std::string dict = "aab";
-  int sq = test.sqrt(65536);
-  LOG << "sq = " << sq << std::endl;
-  LOG << "sqrt " << std::sqrt(2147483648.0);
+//  LOG << (int64_t)5201314*5201314<< std::endl;
+  int sq = test.fastPower(27123, 5201314, 78965412);
+  LOG << "sq = " << sq << std::endl << "," << 1 % 3;
+//  LOG << "sqrt " << std::sqrt(2147483648.0);
   return 0;
 }
